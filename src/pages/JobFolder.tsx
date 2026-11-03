@@ -170,7 +170,7 @@ export default function JobFolder() {
       <section className="flex flex-col gap-3 border-b border-slate-300 bg-white px-4 py-4 sm:px-6">
         <div className="text-[13px] text-slate-600"><Link to="/jobs">Jobs</Link> › <Link to={`/customers/${j.customer.id}`}>{j.customer.name}</Link> › {j.name}</div>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-[28px] font-bold">{j.name}</h1>
+          <h1 className="text-2xl font-bold md:text-[28px]">{j.name}</h1>
           <span className={cx('rounded px-2 py-1 text-xs font-bold uppercase', j.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-slate-100 text-slate-700')}>{j.status}</span>
           {s?.prevailing_wage ? <PwBadge solid /> : <span className="rounded bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">Not prevailing wage</span>}
           <span className="flex-1" />
@@ -196,27 +196,27 @@ export default function JobFolder() {
       </section>
 
       <div className="flex flex-wrap items-start gap-4 px-4 py-4 sm:px-6">
-        <nav aria-label="Job structure" className="flex max-w-[260px] flex-[1_1_220px] flex-col gap-1 rounded-[10px] border border-slate-300 bg-white p-3">
-          <div className="px-1.5 pb-2 text-xs font-bold tracking-wider text-slate-600 uppercase">Phases · buildings · levels</div>
+        <nav aria-label="Job structure" className="flex w-full flex-row gap-1.5 overflow-x-auto md:max-w-[260px] md:flex-[1_1_220px] md:flex-col md:gap-1 md:overflow-visible md:rounded-[10px] md:border md:border-slate-300 md:bg-white md:p-3">
+          <div className="hidden px-1.5 pb-2 text-xs font-bold tracking-wider text-slate-600 uppercase md:block">Phases · buildings · levels</div>
           {[{ id: 'all', name: 'Whole job' }, ...(areas.data ?? [])].map((a) => (
-            <button key={a.id} onClick={() => setArea(a.id)} className={cx('flex min-h-10 items-center gap-2 rounded-md px-2.5 text-left text-sm', area === a.id ? 'bg-blue-50 font-bold text-blue-900' : 'hover:bg-slate-50')}>
+            <button key={a.id} onClick={() => setArea(a.id)} className={cx('flex min-h-10 shrink-0 items-center gap-2 rounded-full border px-3 text-left text-sm whitespace-nowrap md:rounded-md md:border-0 md:px-2.5', area === a.id ? 'border-brand bg-blue-50 font-bold text-blue-900' : 'border-slate-300 bg-white hover:bg-slate-50')}>
               <span className="flex-1">{a.name}</span>
               {a.id !== 'all' && <span className="text-xs text-slate-500">{(lots.data ?? []).filter((l) => l.area_id === a.id).length || ''}</span>}
             </button>
           ))}
           {canEdit && (
-            <form className="mt-2 flex gap-1" onSubmit={(e) => { e.preventDefault(); if (newArea.trim()) run.mutate(async () => { must(await supabase.from('job_areas').insert({ job_id: id, name: newArea.trim(), kind: /bldg|building/i.test(newArea) ? 'building' : /ph/i.test(newArea) ? 'phase' : /level|floor/i.test(newArea) ? 'level' : 'other' })); setNewArea(''); }); }}>
+            <form className="mt-2 hidden gap-1 md:flex" onSubmit={(e) => { e.preventDefault(); if (newArea.trim()) run.mutate(async () => { must(await supabase.from('job_areas').insert({ job_id: id, name: newArea.trim(), kind: /bldg|building/i.test(newArea) ? 'building' : /ph/i.test(newArea) ? 'phase' : /level|floor/i.test(newArea) ? 'level' : 'other' })); setNewArea(''); }); }}>
               <input aria-label="New area" className="min-h-9 w-full rounded-md border border-slate-300 px-2 text-sm" placeholder="Add: Bldg 2, PH10, Level 4…" value={newArea} onChange={(e) => setNewArea(e.target.value)} />
               <Button size="sm">Add</Button>
             </form>
           )}
-          <p className="px-1.5 pt-2 text-xs text-slate-500">A work order can cover several buildings or levels in one visit.</p>
+          <p className="hidden px-1.5 pt-2 text-xs text-slate-500 md:block">A work order can cover several buildings or levels in one visit.</p>
         </nav>
 
         <main className="flex min-w-0 flex-[999_1_520px] flex-col gap-3">
-          <div role="tablist" className="flex flex-wrap gap-1 border-b border-slate-300">
+          <div role="tablist" className="-mx-4 flex gap-1 overflow-x-auto border-b border-slate-300 px-4 md:mx-0 md:flex-wrap md:px-0">
             {([['timeline', 'Timeline'], ['work_orders', `Work orders · ${wos.data?.length ?? 0}`], ['shipments', `Shipments · ${ships.data?.length ?? 0}`], ['files', 'Photos, video & docs'], ...(isAdmin ? [['activity', 'Activity log']] : [])] as [Tab, string][]).map(([k, label]) => (
-              <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)} className={cx('min-h-11 px-3.5', tab === k ? 'border-b-[3px] border-brand font-bold' : 'text-slate-600')}>{label}</button>
+              <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)} className={cx('min-h-11 shrink-0 px-3.5 whitespace-nowrap', tab === k ? 'border-b-[3px] border-brand font-bold' : 'text-slate-600')}>{label}</button>
             ))}
           </div>
 

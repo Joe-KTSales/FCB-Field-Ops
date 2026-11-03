@@ -17,6 +17,17 @@ export function must<T>(res: { data: T | null; error: { message: string } | null
   return res.data as T;
 }
 
+/** Run a paged query until all rows are in (Supabase caps a single response at 1,000 rows). */
+export async function fetchAll<T>(page: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: { message: string } | null }>, size = 1000): Promise<T[]> {
+  const out: T[] = [];
+  for (let from = 0; ; from += size) {
+    const { data, error } = await page(from, from + size - 1);
+    if (error) throw new Error(error.message);
+    out.push(...(data ?? []));
+    if (!data || data.length < size || out.length >= 20000) return out;
+  }
+}
+
 const signedCache = new Map<string, { url: string; exp: number }>();
 
 /** Signed URL for a private object, cached ~50 minutes. */

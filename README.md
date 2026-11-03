@@ -15,7 +15,7 @@ It shares one Supabase database with the shipping app so the two can merge later
 
 ## Deploy
 
-1. **Supabase.** Run every file in `supabase/migrations/` in filename order in the SQL Editor (0001 → 0007).
+1. **Supabase.** Run every file in `supabase/migrations/` in filename order in the SQL Editor (0001 → 0012). Keep **Authentication → Allow new users to sign up** turned off; new accounts start inactive until an admin switches them on.
 2. **Vercel.** Import this repo and add these environment variables:
 
    | Name | Value | Notes |
@@ -32,7 +32,7 @@ It shares one Supabase database with the shipping app so the two can merge later
       ```sql
       update profiles set role = 'admin' where email = 'you@…';
       ```
-   3. After that, set everyone else's role on the app's **Admin** page.
+   3. After that, set everyone else's role on the app's **Admin** page and tick **Active**. New accounts start inactive.
 
 ## Develop
 
@@ -48,7 +48,8 @@ npm run build
 
 | Route | What it does |
 |---|---|
-| `/` | **Dispatch board.** One card per crew for the day. Click a member to mark them out (logged as a call-out). "+ person" adds or moves someone between crews. Drag work orders from the tray onto a crew. Click a stop for details. |
+| `/` | **Dashboard** (admin and managers): today's crews and call-outs, alerts, next 7 days, weekly stats. Dispatchers land on the dispatch board. |
+| `/dispatch` | **Dispatch board.** One card per crew for the day. Click a member to mark them out (logged as a call-out). "+ person" adds or moves someone between crews. Drag work orders from the tray onto a crew. Click a stop for details. |
 | `/week` | **Week and month views.** Crews (or jobs) × days. Drag a chip to reschedule. |
 | `/work-orders`, `/work-orders/:id` | **Work orders.** Status, scope, returned paperwork, line items, flags (with one-click repair or follow-up work orders), who worked, notes and files. |
 | `/jobs`, `/jobs/:id` | **Job folder.** Parties and contacts, phases, buildings and levels, a timeline of visits and shipments, photos, video and documents, notes from every level, and the change log (admin). |

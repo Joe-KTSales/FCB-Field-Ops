@@ -97,7 +97,8 @@ function EmployeeModal({ id, onClose }: { id: string | 'new'; onClose: () => voi
 }
 
 export default function Crews() {
-  const { canEdit } = useAuth();
+  const { canEdit, role } = useAuth();
+  const canManagePeople = role === 'admin' || role === 'manager';   // matches the database rule for employees
   const qc = useQueryClient();
   const crews = useCrews();
   const emps = useEmployees();
@@ -149,10 +150,10 @@ export default function Crews() {
               const ms = (members.data ?? []).filter((m) => m.crew_id === c.id).sort((a, b) => (a.position === 'lead' ? -1 : b.position === 'lead' ? 1 : 0));
               return (
                 <Card key={c.id} className={cx('flex flex-col gap-2 p-3', !c.active && 'opacity-60')}>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <input type="color" aria-label="Crew color" disabled={!canEdit} value={c.color ?? '#64748B'} onChange={(e) => run.mutate(async () => must(await supabase.from('crews').update({ color: e.target.value }).eq('id', c.id)))} className="h-7 w-7 rounded border-0 p-0" />
-                    <input aria-label="Crew name" disabled={!canEdit} defaultValue={c.name} onBlur={(e) => e.target.value !== c.name && run.mutate(async () => must(await supabase.from('crews').update({ name: e.target.value }).eq('id', c.id)))} className="min-h-9 flex-1 rounded border border-transparent px-1 text-base font-bold hover:border-slate-300" />
-                    <select aria-label="Department" disabled={!canEdit} value={c.department ?? ''} onChange={(e) => run.mutate(async () => must(await supabase.from('crews').update({ department: e.target.value }).eq('id', c.id)))} className="min-h-9 rounded border border-slate-300 bg-white px-1 text-sm">
+                    <input aria-label="Crew name" disabled={!canEdit} defaultValue={c.name} onBlur={(e) => e.target.value !== c.name && run.mutate(async () => must(await supabase.from('crews').update({ name: e.target.value }).eq('id', c.id)))} className="min-h-9 min-w-0 flex-1 rounded border border-transparent px-1 text-base font-bold hover:border-slate-300" />
+                    <select aria-label="Department" disabled={!canEdit} value={c.department ?? ''} onChange={(e) => run.mutate(async () => must(await supabase.from('crews').update({ department: e.target.value }).eq('id', c.id)))} className="min-h-9 w-full rounded border border-slate-300 bg-white px-1 text-sm sm:w-auto">
                       {(departments.data ?? []).map((d) => <option key={d.code} value={d.code}>{deptLabel(d)}</option>)}
                     </select>
                   </div>
@@ -212,7 +213,7 @@ export default function Crews() {
               <option value="all">All departments</option>
               {(departments.data ?? []).map((d) => <option key={d.code} value={d.code}>{deptLabel(d)}</option>)}
             </select>
-            {canEdit && <Button variant="primary" onClick={() => setEdit('new')}>+ Add employee</Button>}
+            {canManagePeople && <Button variant="primary" onClick={() => setEdit('new')}>+ Add employee</Button>}
           </div>
           <Card className="overflow-x-auto">
             <table className="w-full min-w-[600px] text-left text-sm">
@@ -227,7 +228,7 @@ export default function Crews() {
                       <td className="px-3 capitalize">{e.default_position}</td>
                       <td className="px-3">{e.departments.map(deptName).join(', ')}</td>
                       <td className="px-3">{crew?.name}</td>
-                      <td className="px-3">{canEdit && <button className="text-brand-dark underline" onClick={() => setEdit(e.id)}>Edit</button>}</td>
+                      <td className="px-3">{canManagePeople && <button className="text-brand-dark underline" onClick={() => setEdit(e.id)}>Edit</button>}</td>
                     </tr>
                   );
                 })}

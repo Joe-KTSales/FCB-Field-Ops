@@ -38,7 +38,7 @@ function Candidates({ raw, onPick }: { raw: string; onPick: (id: string) => void
 
 export default function WorkOrderDetail() {
   const { id = '' } = useParams();
-  const { canEdit } = useAuth();
+  const { canEdit, session } = useAuth();
   const qc = useQueryClient();
   const nav = useNavigate();
   const wq = useWorkOrder(id);
@@ -60,7 +60,8 @@ export default function WorkOrderDetail() {
         superintendent_name: wo.superintendent_name ?? '', superintendent_signed: !!wo.superintendent_signed, crew_on_site: wo.crew_on_site,
       });
     }
-  }, [wo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wo?.id]);
 
   const lines = useQuery({
     queryKey: ['wo-lines', id],
@@ -77,18 +78,20 @@ export default function WorkOrderDetail() {
     queryKey: ['wo-chain', id, wo?.parent_id],
     enabled: !!wo,
     queryFn: async () => {
-      const r = await supabase.from('work_orders').select('id, number, status, scheduled_date').or(`parent_id.eq.${id}${wo?.parent_id ? `,id.eq.${wo.parent_id}` : ''}`);
+      const spawnedFrom = must(await supabase.from('work_order_flags').select('work_order_id').eq('spawned_work_order_id', id)) as { work_order_id: string }[];
+      const ids = [
+        ...(wo?.parent_id ? [wo.parent_id] : []),
+        ...(wo?.flags ?? []).map((f) => f.spawned_work_order_id).filter((x): x is string => !!x),
+        ...spawnedFrom.map((x) => x.work_order_id),
+      ];
+      const r = await supabase.from('work_orders').select('id, number, status, scheduled_date').or(`parent_id.eq.${id}${ids.length ? `,id.in.(${ids.join(',')})` : ''}`);
       return must(r) as { id: string; number: string; status: WoStatus; scheduled_date: string | null }[];
     },
   });
 
   const refresh = () => {
-    qc.invalidateQueries({ queryKey: ['wo', id] });
-    qc.invalidateQueries({ queryKey: ['wo-lines', id] });
-    qc.invalidateQueries({ queryKey: ['wo-assignment', id] });
-    qc.invalidateQueries({ queryKey: ['wo-chain'] });
-    qc.invalidateQueries({ queryKey: ['board'] });
-    qc.invalidateQueries({ queryKey: ['tray'] });
+    for (const k of ['wo', 'wo-lines', 'wo-assignment', 'wo-chain', 'board', 'tray', 'week', 'wo-list', 'month', 'job-wos', 'job-summary', 'dash-wos', 'dash-undated', 'dash-flagged', 'notes'])
+      qc.invalidateQueries({ queryKey: [k] });
   };
   const run = useMutation({ mutationFn: async (fn: () => Promise<unknown>) => fn(), onSuccess: refresh });
   const patch = (p: Record<string, unknown>) => run.mutate(async () => must(await supabase.from('work_orders').update(p).eq('id', id)));
@@ -98,10 +101,18 @@ export default function WorkOrderDetail() {
   const f = (k: string) => form[k] as string;
   const setF = (k: string, v: unknown) => setForm((s) => ({ ...s, [k]: v }));
   const saveForm = () =>
-    patch({
+    run.mutate(async () => {
+      const newDate = f('scheduled_date') || null;
+      const crewId = a?.crew_day.crew?.id;
+      if (newDate !== wo.scheduled_date) {
+        if (newDate && crewId) await assignWorkOrder(wo.id, crewId, newDate);
+        else if (a) must(await supabase.from('crew_day_stops').delete().eq('work_order_id', wo.id).select('id'));
+      }
+      must(await supabase.from('work_orders').update({
       scope: f('scope') || null, status_reason: f('status_reason') || null, scheduled_date: f('scheduled_date') || null, priority: Number(form.priority),
       time_in: f('time_in') || null, time_out: f('time_out') || null, completion_notes: f('completion_notes') || null, completion_notes_en: f('completion_notes_en') || null,
       superintendent_name: f('superintendent_name') || null, superintendent_signed: !!form.superintendent_signed, crew_on_site: !!form.crew_on_site,
+      }).eq('id', wo.id));
     });
   const a = assignment.data?.[0];
   const ro = !canEdit;
@@ -252,7 +263,7 @@ export default function WorkOrderDetail() {
                   <FlagChip label={fl.type.label} color={fl.type.color} resolved={!!fl.resolved_at} />
                   <span className="flex-1" />
                   {canEdit && !fl.resolved_at && (
-                    <button className="text-xs font-semibold text-brand-dark underline" onClick={() => run.mutate(async () => must(await supabase.from('work_order_flags').update({ resolved_at: new Date().toISOString() }).eq('id', fl.id)))}>Resolve</button>
+                    <button className="text-xs font-semibold text-brand-dark underline" onClick={() => run.mutate(async () => must(await supabase.from('work_order_flags').update({ resolved_at: new Date().toISOString(), resolved_by: session?.user.id }).eq('id', fl.id)))}>Resolve</button>
                   )}
                   {fl.resolved_at && <span className="text-xs text-slate-500">resolved {stamp(fl.resolved_at)}</span>}
                 </div>

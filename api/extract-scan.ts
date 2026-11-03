@@ -82,11 +82,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const { data: scan, error } = await sb
     .from('work_order_scans')
-    .select('id, file:files!wo_scans_file_fk(id, storage_path, mime_type, bucket)')
+    .select('id, status, extracted, file:files!wo_scans_file_fk(id, storage_path, mime_type, bucket, size_bytes)')
     .eq('id', scanId)
     .single();
   if (error || !scan) return res.status(404).json({ error: error?.message || 'Scan not found' });
-  const file = (scan as unknown as { file: { storage_path: string; mime_type: string | null; bucket: string | null } }).file;
+  const s0 = scan as unknown as {
+    status: string; extracted: { sheets?: { confirmed_work_order_id?: string }[] } | null;
+    file: { storage_path: string; mime_type: string | null; bucket: string | null; size_bytes: number | null } | null;
+  };
+  const file = s0.file;
+  if (!file) return res.status(404).json({ error: 'The scanned file is missing' });
+  if (s0.status === 'confirmed' || s0.extracted?.sheets?.some((x) => x.confirmed_work_order_id)) {
+    return res.status(409).json({ error: 'Some sheets in this scan are already confirmed, so it can’t be re-read.' });
+  }
+  if ((file.size_bytes ?? 0) > 40 * 1024 * 1024) return res.status(413).json({ error: 'Scan is over 40 MB — split it into smaller files.' });
+  // Only people who can edit work orders may trigger reading (it spends API credit). RLS decides:
+  const claim = await sb.from('work_order_scans').update({ error: null }).eq('id', scanId).select('id');
+  if (claim.error || !claim.data?.length) return res.status(403).json({ error: 'You don’t have permission to process scans.' });
 
   if (!process.env.ANTHROPIC_API_KEY) {
     // No AI key yet: go straight to hand entry (one blank sheet per PDF page) instead of reporting a failure.

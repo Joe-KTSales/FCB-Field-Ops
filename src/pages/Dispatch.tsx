@@ -5,6 +5,8 @@ import { supabase, must } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth';
 import { assignWorkOrder, deptLabel, putMemberOnCrewDay, unassignStop, useCrews, useDepartments, useEmployees } from '@/lib/data';
 import { clock, longDate, shift, shortDate, todayIso } from '@/lib/dates';
+import { format, parseISO } from 'date-fns';
+import { useIsMobile } from '@/lib/useIsMobile';
 import type { BoardCrewDay, BoardMember, BoardStop, TrayItem, WoStatus } from '@/lib/types';
 import NewWorkOrder from '@/components/NewWorkOrder';
 import WorkOrderDrawer from '@/components/WorkOrderDrawer';
@@ -110,6 +112,8 @@ export default function Dispatch() {
   const [sel, setSel] = useState<string | null>(null);
   const [newOpen, setNewOpen] = useState(false);
   const [dropTarget, setDropTarget] = useState<string | null>(null);
+  const isMobile = useIsMobile();
+  const [trayOpen, setTrayOpen] = useState(false);
   const crews = useCrews();
   const employees = useEmployees();
   const setDate = (d: string) => setParams({ date: d });
@@ -133,9 +137,7 @@ export default function Dispatch() {
   });
 
   const refresh = () => {
-    qc.invalidateQueries({ queryKey: ['board'] });
-    qc.invalidateQueries({ queryKey: ['tray'] });
-    qc.invalidateQueries({ queryKey: ['week'] });
+    for (const k of ['board', 'tray', 'week', 'wo', 'wo-list', 'dash-wos', 'dash-undated', 'dash-flagged', 'month']) qc.invalidateQueries({ queryKey: [k] });
   };
   const run = useMutation({ mutationFn: async (fn: () => Promise<unknown>) => fn(), onSuccess: refresh });
 
@@ -161,6 +163,7 @@ export default function Dispatch() {
   const onDayIds = new Set(days.flatMap((d) => d.members.map((m) => m.employee_id)));
   const benched = (employees.data ?? []).filter((e) => e.active && !onDayIds.has(e.id));
   const activeCrews = (crews.data ?? []).filter((c) => c.active && (dept === 'all' || c.department === dept));
+  const missingCrews = (crews.data ?? []).filter((c) => c.active && (dept === 'all' || c.department === dept) && !days.some((d) => d.crew_id === c.id));
   const trayToday = (tray.data ?? []).filter((t) => t.scheduled_date === date);
   const trayLater = (tray.data ?? []).filter((t) => t.scheduled_date && t.scheduled_date > date);
   const trayUndated = (tray.data ?? []).filter((t) => !t.scheduled_date);
@@ -187,36 +190,50 @@ export default function Dispatch() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-wrap items-center gap-4 px-4 pt-4 pb-2 sm:px-6">
-        <div className="flex items-center gap-1">
-          <button aria-label="Previous day" onClick={() => setDate(shift(date, -1))} className="h-10 w-10 rounded-md border border-slate-300 bg-white text-lg">‹</button>
-          <div className="px-3">
-            <div className="text-[22px] font-bold">{longDate(date)}</div>
-            <div className="text-[13px] text-slate-600">{stats}</div>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-3 px-4 pt-4 pb-2 sm:px-6">
+        <div className="flex w-full items-center gap-1 md:w-auto">
+          <button aria-label="Previous day" onClick={() => setDate(shift(date, -1))} className="h-11 w-11 shrink-0 rounded-md border border-slate-300 bg-white text-lg md:h-10 md:w-10">‹</button>
+          <div className="min-w-0 flex-1 px-2 text-center md:flex-none md:px-3 md:text-left">
+            <div className="text-lg font-bold md:text-[22px]">{isMobile ? format(parseISO(date), 'EEE, MMM d') : longDate(date)}</div>
+            <div className="text-xs text-slate-600 md:text-[13px]">{stats}</div>
           </div>
-          <button aria-label="Next day" onClick={() => setDate(shift(date, 1))} className="h-10 w-10 rounded-md border border-slate-300 bg-white text-lg">›</button>
-          <input aria-label="Pick a date" type="date" value={date} onChange={(e) => e.target.value && setDate(e.target.value)} className="ml-2 min-h-10 rounded-md border border-slate-300 bg-white px-2 text-sm" />
+          <button aria-label="Next day" onClick={() => setDate(shift(date, 1))} className="h-11 w-11 shrink-0 rounded-md border border-slate-300 bg-white text-lg md:h-10 md:w-10">›</button>
+          <input aria-label="Pick a date" type="date" value={date} onChange={(e) => e.target.value && setDate(e.target.value)} className="ml-2 hidden min-h-10 rounded-md border border-slate-300 bg-white px-2 text-sm md:block" />
           {date !== todayIso() && <Button size="sm" variant="ghost" onClick={() => setDate(todayIso())}>Today</Button>}
         </div>
-        <div role="group" aria-label="Department" className="flex flex-wrap gap-1 rounded-lg bg-slate-200 p-1">
+        <div role="group" aria-label="Department" className="-mx-4 flex w-[calc(100%+32px)] gap-1 overflow-x-auto px-4 md:mx-0 md:w-auto md:flex-wrap md:overflow-visible md:rounded-lg md:bg-slate-200 md:p-1">
           {[['all', 'All'] as [string, string], ...(departments.data ?? []).map((d) => [d.code, deptLabel(d)] as [string, string])].map(([k, label]) => (
-            <button key={k} onClick={() => setDept(k)} className={cx('min-h-9 rounded-md px-3 text-sm font-semibold whitespace-nowrap', dept === k ? 'bg-white shadow-sm' : 'text-slate-600')}>
+            <button key={k} onClick={() => setDept(k)} className={cx('min-h-9 shrink-0 rounded-full px-3.5 text-sm font-semibold whitespace-nowrap md:rounded-md md:px-3', dept === k ? 'bg-navy text-white md:bg-white md:text-slate-900 md:shadow-sm' : 'bg-slate-200 text-slate-700 md:bg-transparent md:text-slate-600')}>
               {label} · {deptCount(k)}
             </button>
           ))}
         </div>
-        <div className="flex-1" />
-        <Link to={`/week?date=${date}`} className="rounded-md border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 no-underline">Week view</Link>
-        {canEdit && <Button variant="primary" onClick={() => setNewOpen(true)}>+ New work order</Button>}
+        <div className="hidden flex-1 md:block" />
+        <Link to={`/week?date=${date}`} className="hidden rounded-md border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 no-underline md:block">Week view</Link>
+        {canEdit && <span className="hidden md:block"><Button variant="primary" onClick={() => setNewOpen(true)}>+ New work order</Button></span>}
+        {canEdit && (
+          <button
+            onClick={() => setNewOpen(true)}
+            aria-label="New work order"
+            className="fixed right-4 bottom-[calc(84px+env(safe-area-inset-bottom))] z-20 flex h-14 w-14 items-center justify-center rounded-full bg-brand text-3xl leading-none text-white shadow-lg md:hidden"
+          >+</button>
+        )}
       </div>
 
       <ErrorBox error={board.error || tray.error || run.error} />
 
       <div className="flex flex-wrap items-start gap-4 px-4 pt-2 pb-6 sm:px-6">
-        <aside aria-label="Needs a crew" className="flex max-w-[300px] flex-[1_1_260px] flex-col gap-2.5">
-          <SectionLabel>Needs a crew {canEdit && '· drag onto a crew'}</SectionLabel>
+        <aside aria-label="Needs a crew" className="flex w-full flex-col gap-2.5 md:max-w-[300px] md:flex-[1_1_260px]">
+          {isMobile ? (
+            <button onClick={() => setTrayOpen(!trayOpen)} aria-expanded={trayOpen} className="flex min-h-11 items-center gap-2 rounded-lg border border-dashed border-slate-400 bg-white px-3 text-left">
+              <span className="flex-1 text-sm font-bold">Needs a crew · {tray.data?.length ?? 0}{trayOverdue.length ? <span className="text-red-700"> · {trayOverdue.length} overdue</span> : null}</span>
+              <span aria-hidden="true" className="text-slate-500">{trayOpen ? '▲' : '▼'}</span>
+            </button>
+          ) : (
+            <SectionLabel>Needs a crew {canEdit && '· drag onto a crew'}</SectionLabel>
+          )}
           {tray.isLoading && <Spinner />}
-          {[['Overdue', trayOverdue], ['This day', trayToday], ['No date yet', trayUndated], ['Coming up (2 weeks)', trayLater]].map(([label, items]) =>
+          {(!isMobile || trayOpen) && [['Overdue', trayOverdue], ['This day', trayToday], ['No date yet', trayUndated], ['Coming up (2 weeks)', trayLater]].map(([label, items]) =>
             (items as TrayItem[]).length ? (
               <div key={label as string} className="flex flex-col gap-2">
                 <div className={cx('text-xs font-semibold', label === 'Overdue' ? 'text-red-700' : 'text-slate-600')}>{label as string}</div>
@@ -233,11 +250,17 @@ export default function Dispatch() {
               </div>
             ) : null,
           )}
-          {tray.data && tray.data.length === 0 && <p className="text-sm text-slate-500">Everything is on a crew.</p>}
+          {(!isMobile || trayOpen) && tray.data && tray.data.length === 0 && <p className="text-sm text-slate-500">Everything is on a crew.</p>}
         </aside>
 
         <section className="grid min-w-0 flex-[999_1_560px] grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-3">
           {board.isLoading && <Spinner />}
+          {board.data && days.length > 0 && canEdit && missingCrews.length > 0 && (
+            <div className="col-span-full flex flex-wrap items-center gap-3 rounded-lg border border-dashed border-slate-400 bg-white px-4 py-2.5 text-sm">
+              <span className="flex-1">{missingCrews.length} usual crew{missingCrews.length > 1 ? 's aren’t' : ' isn’t'} on the board for this day: {missingCrews.map((c) => c.name).join(', ')}</span>
+              <Button size="sm" disabled={run.isPending} onClick={() => run.mutate(async () => must(await supabase.rpc('load_default_roster', { p_date: date })))}>Add them</Button>
+            </div>
+          )}
           {board.data && days.length === 0 && (
             <div className="col-span-full rounded-lg border border-dashed border-slate-400 bg-white p-6 text-center">
               <p className="font-semibold">No crews set up for {shortDate(date)} yet.</p>
@@ -323,9 +346,9 @@ export default function Dispatch() {
 
         {sel && (
           <WorkOrderDrawer
+            fullscreen={isMobile}
             id={sel}
             onClose={() => setSel(null)}
-            onChanged={refresh}
             onStatus={(status: WoStatus) => run.mutate(async () => must(await supabase.from('work_orders').update({ status }).eq('id', sel)))}
           />
         )}

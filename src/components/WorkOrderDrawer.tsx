@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase, must } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth';
-import { clock, shortDate } from '@/lib/dates';
+import { clock, shortDate, todayIso } from '@/lib/dates';
 import type { WoStatus, WoType } from '@/lib/types';
 import { Button, ErrorBox, FlagChip, PwBadge, SectionLabel, Spinner, STATUS_META, TYPE_META, cx } from './ui';
 
@@ -43,25 +43,30 @@ export function usePw(jobId: string | undefined, date: string | null | undefined
   return useQuery({
     queryKey: ['pw', jobId, date],
     enabled: !!jobId,
-    queryFn: async () => must(await supabase.rpc('is_prevailing_wage', { p_job: jobId!, p_date: date ?? new Date().toISOString().slice(0, 10) })) as boolean,
+    queryFn: async () => must(await supabase.rpc('is_prevailing_wage', { p_job: jobId!, p_date: date ?? todayIso() })) as boolean,
   });
 }
 
 const STATUSES: WoStatus[] = ['planned', 'started', 'on_hold', 'complete', 'canceled'];
 
-export default function WorkOrderDrawer({ id, onClose, onStatus }: { id: string; onClose: () => void; onChanged: () => void; onStatus: (s: WoStatus) => void }) {
+export default function WorkOrderDrawer({ id, onClose, onStatus, fullscreen }: { id: string; onClose: () => void; onStatus: (s: WoStatus) => void; fullscreen?: boolean }) {
   const { canEdit } = useAuth();
   const q = useWorkOrder(id);
   const wo = q.data;
   const pw = usePw(wo?.job.id, wo?.scheduled_date);
 
   return (
-    <aside aria-label="Work order detail" className="max-w-[400px] flex-[1_1_340px] self-start overflow-hidden rounded-[10px] border border-slate-300 bg-white shadow-xl lg:sticky lg:top-4">
+    <aside
+      aria-label="Work order detail"
+      className={fullscreen
+        ? 'fixed inset-0 z-50 overflow-y-auto bg-white pb-[env(safe-area-inset-bottom)]'
+        : 'max-w-[400px] flex-[1_1_340px] self-start overflow-hidden rounded-[10px] border border-slate-300 bg-white shadow-xl lg:sticky lg:top-4'}
+    >
       {!wo ? (
         q.error ? <ErrorBox error={q.error} /> : <Spinner />
       ) : (
         <>
-          <div className="flex items-start gap-2 bg-navy px-4 py-3.5 text-white">
+          <div className={cx('flex items-start gap-2 bg-navy px-4 py-3.5 text-white', fullscreen && 'sticky top-0 pt-[max(env(safe-area-inset-top),14px)]')}>
             <div className="flex-1">
               <div className="font-mono text-[13px] text-navy-text">{wo.number} · {TYPE_META[wo.type_code].label}</div>
               <div className="mt-0.5 text-xl font-bold">{wo.job.name}</div>

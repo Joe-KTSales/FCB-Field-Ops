@@ -109,6 +109,8 @@ function SheetReview({ scan, idx, sheet, onDone }: { scan: Scan; idx: number; sh
     setErr(null);
     setBusy(true);
     try {
+      const fresh = must(await supabase.from('work_order_scans').select('extracted').eq('id', scan.id).single()) as { extracted: { sheets: Sheet[] } | null };
+      if (fresh.extracted?.sheets?.[idx]?.confirmed_work_order_id) throw new Error('This sheet was already confirmed — refresh the page.');
       let targetId = woId;
       let targetNumber = sheet.work_order_candidates?.find((w) => w.id === woId)?.number ?? dayWos.data?.find((w) => w.id === woId)?.number ?? '';
       if (!targetId) {
@@ -121,7 +123,7 @@ function SheetReview({ scan, idx, sheet, onDone }: { scan: Scan; idx: number; sh
       }
       must(
         await supabase.from('work_orders').update({
-          status: canceled ? 'canceled' : flags.includes('partial') ? 'complete' : 'complete',
+          status: canceled ? 'canceled' : 'complete',   // partial visits are complete + a 'Partial — return' flag
           status_reason: canceled ? notesEn || notesEs || 'Not ready' : null,
           crew_on_site: true,
           time_in: timeIn || null, time_out: timeOut || null,
@@ -143,14 +145,19 @@ function SheetReview({ scan, idx, sheet, onDone }: { scan: Scan; idx: number; sh
         .filter((w) => w.employee_id && w.raw && !emps.data?.some((e) => e.id === w.employee_id && e.display_name.toLowerCase() === w.raw.toLowerCase()))
         .map((w) => ({ employee_id: w.employee_id, alias: w.raw.replace(/\?/g, '').trim(), source: 'scan_confirmed' }));
       if (aliasRows.length) await supabase.from('employee_aliases').upsert(aliasRows, { onConflict: 'employee_id,alias_norm', ignoreDuplicates: true });
+      const tag = `scan:${scan.id}#${idx}`;
+      must(await supabase.from('work_order_lines').delete().eq('work_order_id', targetId).eq('note', tag));
       if (lines.length) {
         must(await supabase.from('work_order_lines').insert(lines.map((l, i) => ({
+          note: tag,
           work_order_id: targetId, lot_label: l.lot || null, room: l.room, raw_product: l.product || null, hand: l.hand,
           qty_planned: l.qty || 1, qty_done: ['done', 'room_in', 'stockpiled'].includes(l.status) ? l.qty || 1 : null, status: l.status, sort_order: i + 1,
         }))));
       }
       if (flags.length) {
-        must(await supabase.from('work_order_flags').insert(flags.map((code) => ({ work_order_id: targetId, flag_code: code, note: sheet.flag_details?.[code] ?? null }))));
+        const have = must(await supabase.from('work_order_flags').select('flag_code').eq('work_order_id', targetId).is('resolved_at', null)) as { flag_code: string }[];
+        const add = flags.filter((code) => !have.some((h) => h.flag_code === code));
+        if (add.length) must(await supabase.from('work_order_flags').insert(add.map((code) => ({ work_order_id: targetId, flag_code: code, note: sheet.flag_details?.[code] ?? null }))));
       }
       // attach the scan to the work order (one file row per work order, same stored object)
       if (idx === 0 && !scan.work_order_id) {

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { supabase, must } from '@/lib/supabase';
+import { supabase, must, fetchAll } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth';
 import { dayLabel, longDate, mondayOf, monthDay, shift, todayIso } from '@/lib/dates';
 import type { BoardCrewDay, WoStatus, WoType } from '@/lib/types';
@@ -97,7 +97,7 @@ export default function Dashboard() {
   const ranged = useQuery({
     queryKey: ['dash-wos', statsFrom, horizon],
     queryFn: async () =>
-      must(await supabase.from('v_work_order_overview').select('*').gte('scheduled_date', statsFrom).lte('scheduled_date', horizon).limit(5000)) as Wo[],
+      fetchAll<Wo>((a, b) => supabase.from('v_work_order_overview').select('*').gte('scheduled_date', statsFrom).lte('scheduled_date', horizon).order('id').range(a, b)),
   });
   const undated = useQuery({
     queryKey: ['dash-undated'],
@@ -200,15 +200,15 @@ export default function Dashboard() {
     <div className="flex flex-col gap-5 px-4 py-5 sm:px-6">
       <div className="flex flex-wrap items-end gap-3">
         <div className="flex-1">
-          <h1 className="text-[24px] font-bold">Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}{profile?.full_name ? `, ${profile.full_name.split(' ')[0]}` : ''}</h1>
+          <h1 className="text-xl font-bold md:text-[24px]">Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}{profile?.full_name ? `, ${profile.full_name.split(' ')[0]}` : ''}</h1>
           <div className="text-sm text-slate-600">{longDate(today)}</div>
         </div>
-        <Link to="/dispatch" className="rounded-md bg-brand px-4 py-2.5 text-sm font-semibold text-white no-underline">Open today’s dispatch board</Link>
+        <Link to="/dispatch" className="hidden rounded-md bg-brand px-4 py-2.5 text-sm font-semibold text-white no-underline md:block">Open today’s dispatch board</Link>
       </div>
       <ErrorBox error={ranged.error || undated.error || flagged.error || board.error} />
       {loading && <Spinner />}
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3">
+      <div className="grid grid-cols-2 gap-2.5 md:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] md:gap-3">
         <Tile n={crewsToday.length} label={`crews out today · ${peopleToday} people`} to={`/dispatch?date=${today}`} />
         <Tile n={outToday.length} label="called out today" tone="bad" to={`/dispatch?date=${today}`} />
         <Tile n={d.needsCrew.length} label={`need a crew${d.urgent.length ? ` · ${d.urgent.length} high/urgent` : ''}`} tone="warn" to="/dispatch" />

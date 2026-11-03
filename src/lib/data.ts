@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase, must } from './supabase';
+import { todayIso } from './dates';
 import type { Crew, Department, Employee, FlagType } from './types';
 
 export function useCrews() {
@@ -64,7 +65,13 @@ export async function ensureCrewDay(crewId: string, date: string): Promise<strin
 /** Put a work order on a crew for a date (moves it if it was elsewhere). */
 export async function assignWorkOrder(workOrderId: string, crewId: string, date: string) {
   const crewDayId = await ensureCrewDay(crewId, date);
-  must(await supabase.from('crew_day_stops').delete().eq('work_order_id', workOrderId));
+  // Move it off any crew for that date or later; past days stay as history (who went, for payroll/PW).
+  const existing = must(
+    await supabase.from('crew_day_stops').select('id, crew_day:crew_days(work_date)').eq('work_order_id', workOrderId),
+  ) as unknown as { id: string; crew_day: { work_date: string } | null }[];
+  const today = todayIso();
+  const drop = existing.filter((s) => !s.crew_day || s.crew_day.work_date === date || s.crew_day.work_date >= today).map((s) => s.id);
+  if (drop.length) must(await supabase.from('crew_day_stops').delete().in('id', drop));
   const last = must(
     await supabase.from('crew_day_stops').select('sequence').eq('crew_day_id', crewDayId).order('sequence', { ascending: false }).limit(1),
   ) as { sequence: number }[];

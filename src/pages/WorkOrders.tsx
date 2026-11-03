@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/auth';
 import { shift, shortDate, todayIso } from '@/lib/dates';
 import type { WoStatus, WoType } from '@/lib/types';
 import NewWorkOrder from '@/components/NewWorkOrder';
-import { Button, ErrorBox, Spinner, StatusText, TypePill, inputCls } from '@/components/ui';
+import { Button, ErrorBox, Spinner, StatusText, TypePill, cx, inputCls } from '@/components/ui';
 
 interface Row {
   id: string; number: string; type_code: WoType; status: WoStatus; scheduled_date: string | null; scope: string | null; priority: number;
@@ -26,6 +26,7 @@ export default function WorkOrders() {
   const [status, setStatus] = useState<'open' | WoStatus | 'all'>(() => (params.get('flagged') === '1' ? 'all' : 'open'));
   const [text, setText] = useState(params.get('q') ?? '');
   const [newOpen, setNewOpen] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   const q = useQuery({
     queryKey: ['wo-list', status, type, from, to],
@@ -57,8 +58,12 @@ export default function WorkOrders() {
         <h1 className="flex-1 text-[22px] font-bold">Work orders</h1>
         {canEdit && <Button variant="primary" onClick={() => setNewOpen(true)}>+ New work order</Button>}
       </div>
-      <div className="flex flex-wrap items-end gap-3 rounded-[10px] border border-slate-300 bg-white p-3">
-        <input aria-label="Filter" placeholder="Filter by number, job, customer…" className={inputCls + ' min-w-56 flex-1'} value={text} onChange={(e) => setText(e.target.value)} />
+      <div className="flex gap-2 md:hidden">
+        <input aria-label="Filter" placeholder="Filter by number, job, customer…" className={inputCls + ' min-w-0 flex-1'} value={text} onChange={(e) => setText(e.target.value)} />
+        <Button onClick={() => setShowFilters(!showFilters)} aria-expanded={showFilters}>Filters</Button>
+      </div>
+      <div className={cx('flex-wrap items-end gap-3 rounded-[10px] border border-slate-300 bg-white p-3 md:flex', showFilters ? 'flex' : 'hidden')}>
+        <input aria-label="Filter" placeholder="Filter by number, job, customer…" className={inputCls + ' hidden min-w-56 flex-1 md:block'} value={text} onChange={(e) => setText(e.target.value)} />
         <select aria-label="Status" className={inputCls} value={status} onChange={(e) => setStatus(e.target.value as typeof status)}>
           <option value="open">Open (planned / started / on hold)</option><option value="all">All statuses</option>
           <option value="planned">Planned</option><option value="started">Started</option><option value="on_hold">On hold</option><option value="complete">Done</option><option value="canceled">Canceled</option>
@@ -72,7 +77,23 @@ export default function WorkOrders() {
       </div>
       <ErrorBox error={q.error} />
       {q.isLoading && <Spinner />}
-      <div className="overflow-x-auto rounded-[10px] border border-slate-300 bg-white">
+      <div className="flex flex-col gap-2 md:hidden">
+        {rows.map((r) => {
+          const open = r.flags.filter((f) => !f.resolved_at && f.type.severity >= 2).length;
+          return (
+            <Link key={r.id} to={`/work-orders/${r.id}`} className="flex flex-col gap-1 rounded-[10px] border border-slate-300 bg-white p-3 text-slate-900 no-underline">
+              <div className="flex items-center gap-2">
+                <TypePill type={r.type_code} /><span className="font-mono text-[13px]">{r.number}</span><span className="flex-1" /><StatusText status={r.status} />
+              </div>
+              <div className="font-semibold">{r.job.name}</div>
+              <div className="text-[13px] text-slate-600">{r.job.customer.name}{r.job.city ? ` · ${r.job.city}` : ''} · {r.scheduled_date ? shortDate(r.scheduled_date) : 'no date'}</div>
+              {open > 0 && <div className="text-xs font-bold text-red-700">{open} open flag{open > 1 ? 's' : ''}</div>}
+            </Link>
+          );
+        })}
+        {q.data && rows.length === 0 && <p className="p-2 text-sm text-slate-500">No work orders match.</p>}
+      </div>
+      <div className="hidden overflow-x-auto rounded-[10px] border border-slate-300 bg-white md:block">
         <table className="w-full min-w-[820px] text-left text-sm">
           <thead className="border-b border-slate-300 bg-slate-50 text-xs tracking-wider text-slate-600 uppercase">
             <tr><th className="px-3 py-2.5">Number</th><th className="px-3">Type</th><th className="px-3">Date</th><th className="px-3">Job</th><th className="px-3">Scope</th><th className="px-3">Status</th><th className="px-3">Flags</th></tr>

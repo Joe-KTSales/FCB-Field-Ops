@@ -8,6 +8,7 @@ import { assignWorkOrder, deptLabel, useCrews, useDepartments } from '@/lib/data
 import { dayLabel, iso, monthDay, mondayOf, shift, todayIso, weekDays } from '@/lib/dates';
 import type { BoardCrewDay, BoardStop, WoStatus, WoType } from '@/lib/types';
 import { ErrorBox, PwBadge, Spinner, TYPE_META, cx } from '@/components/ui';
+import { useIsMobile } from '@/lib/useIsMobile';
 
 type Chip = BoardStop & { crew_name: string; crew_id: string | null; date: string };
 
@@ -90,6 +91,7 @@ export default function Week() {
   const monday = mondayOf(anchor);
   const days = weekDays(monday);
   const [rowsBy, setRowsBy] = useState<'crews' | 'jobs'>('crews');
+  const isMobile = useIsMobile();
   const [pwOnly, setPwOnly] = useState(false);
   const [dept, setDept] = useState('all');
   const departments = useDepartments();
@@ -134,7 +136,7 @@ export default function Week() {
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-1">
           <button aria-label="Previous" onClick={() => set({ date: range === 'week' ? shift(monday, -7) : iso(startOfMonth(parseISO(shift(iso(startOfMonth(parseISO(anchor))), -1)))) })} className="h-10 w-10 rounded-md border border-slate-300 bg-white text-lg">‹</button>
-          <div className="px-2 text-[22px] font-bold">
+          <div className="px-2 text-lg font-bold md:text-[22px]">
             {range === 'week' ? `Week of ${monthDay(days[0])} – ${monthDay(days[6])}, ${days[6].slice(0, 4)}` : format(parseISO(anchor), 'MMMM yyyy')}
           </div>
           <button aria-label="Next" onClick={() => set({ date: range === 'week' ? shift(monday, 7) : iso(startOfMonth(parseISO(shift(iso(endOfMonth(parseISO(anchor))), 1)))) })} className="h-10 w-10 rounded-md border border-slate-300 bg-white text-lg">›</button>
@@ -146,7 +148,7 @@ export default function Week() {
               <option value="all">All departments</option>
               {(departments.data ?? []).map((d) => <option key={d.code} value={d.code}>{deptLabel(d)}</option>)}
             </select>
-            <div role="group" aria-label="Rows" className="flex gap-1 rounded-lg bg-slate-200 p-1">
+            <div role="group" aria-label="Rows" className="hidden gap-1 rounded-lg bg-slate-200 p-1 md:flex">
               {(['crews', 'jobs'] as const).map((r) => (
                 <button key={r} onClick={() => setRowsBy(r)} className={cx('min-h-9 rounded-md px-3 text-sm font-semibold', rowsBy === r ? 'bg-white shadow-sm' : 'text-slate-600')}>Rows: {r === 'crews' ? 'Crews' : 'Jobs'}</button>
               ))}
@@ -167,6 +169,41 @@ export default function Week() {
 
       {range === 'month' ? (
         <MonthView anchor={anchor} />
+      ) : isMobile ? (
+        <div className="flex flex-col gap-3">
+          {q.isLoading && <Spinner />}
+          {days.map((d) => {
+            const dayChips = chips.filter((x) => x.date === d && crewRows.some((c) => c.id === x.crew_id));
+            const crewsThatDay = crewRows.filter((c) => dayChips.some((x) => x.crew_id === c.id) || outByCrewDate.has(`${c.id}|${d}`));
+            return (
+              <section key={d} className="rounded-[10px] border border-slate-300 bg-white">
+                <Link to={`/dispatch?date=${d}`} className={cx('flex items-baseline gap-2 border-b border-slate-100 px-3.5 py-2.5 text-slate-900 no-underline', d === todayIso() && 'bg-blue-50')}>
+                  <span className="font-bold">{dayLabel(d)} {monthDay(d)}</span>
+                  <span className="text-xs text-slate-600">{dayChips.length ? `${dayChips.length} stop${dayChips.length > 1 ? 's' : ''} · ${crewsThatDay.length} crew${crewsThatDay.length > 1 ? 's' : ''}` : 'nothing scheduled'}</span>
+                  <span className="flex-1" /><span className="text-xs text-brand-dark">Open day →</span>
+                </Link>
+                {crewsThatDay.length > 0 && (
+                  <div className="flex flex-col divide-y divide-slate-100">
+                    {crewsThatDay.map((c) => {
+                      const out = outByCrewDate.get(`${c.id}|${d}`);
+                      return (
+                        <div key={c.id} className="flex flex-col gap-1.5 px-3.5 py-2.5">
+                          <div className="flex items-center gap-2 text-sm font-semibold">
+                            <span className="h-2.5 w-2.5 rounded-sm" style={{ background: c.color ?? '#64748B' }} />{c.name}
+                            {out && <span className="rounded bg-red-100 px-1.5 text-[11px] font-bold text-red-800">Out: {out.join(', ')}</span>}
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {dayChips.filter((x) => x.crew_id === c.id).sort((a, b) => a.sequence - b.sequence).map((x) => <ChipView key={x.stop_id} c={x} canEdit={false} />)}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+            );
+          })}
+        </div>
       ) : (
         <div className="overflow-x-auto rounded-[10px] border border-slate-300 bg-white">
           <div className="min-w-[1180px]">
@@ -218,7 +255,7 @@ export default function Week() {
           </div>
         </div>
       )}
-      {range === 'week' && (
+      {range === 'week' && !isMobile && (
         <p className="text-[13px] text-slate-600">
           Blue = install · green = stocking · amber = finals/repair · <b>PW</b> = prevailing wage · <b>!</b> = open flag · struck through = canceled.
           {canEdit && rowsBy === 'crews' && ' Drag a chip to another day or crew to reschedule.'}
