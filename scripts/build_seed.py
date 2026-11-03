@@ -427,6 +427,43 @@ def ratio(a, b):
 wbp = openpyxl.load_workbook(pw_path, data_only=True)
 pw_rows = [r for r in wbp.worksheets[0].iter_rows(min_row=2, values_only=True) if r and r[0] and r[1]]
 PW_FROM = "2025-01-01"
+
+# Everything the shipping data says about each job (all spellings + order notes), for match evidence
+job_text = collections.defaultdict(str)
+for o in orders:
+    cid0 = alias_to_company.get(o["customer_name"].strip())
+    k0 = (cid0, job_key(o["job_name"]))
+    if k0 in jobs:
+        job_text[jobs[k0]["id"]] += " " + o["job_name"] + " " + o["notes"]
+GENERIC = {"apts", "apt", "apartments", "the", "senior", "village", "villas", "homes", "at", "on", "and", "turnkey", "prev", "wage", "pre", "prevailing"}
+
+
+def match_confidence(pw_name, pw_city, pw_address, pw_cust_id, job):
+    """0-100 score + plain-English reasons, from name, customer, PW marking and location evidence."""
+    a, b = job_key(pw_name), job_key(job["name"])
+    ta = {t for t in a.split() if t not in GENERIC}
+    tb = {t for t in b.split() if t not in GENERIC}
+    jacc = len(ta & tb) / len(ta | tb) if ta | tb else 0
+    name = max(ratio(a, b), jacc)
+    reasons, score = [f"Names {round(name * 100)}% alike"], name * 55
+    if job["customer_id"] == pw_cust_id:
+        score += 20; reasons.append("Same customer")
+    else:
+        score -= 10; reasons.append(f"Different customer in shipping ({company_name[job['customer_id']]})")
+    # evidence from this job and its sibling records (shipping sometimes splits one project into several job names)
+    core = {t for t in b.split() if t not in GENERIC}
+    sibs = [j2["id"] for (c2, k2), j2 in jobs.items() if c2 == job["customer_id"] and core and core <= set(k2.split())]
+    text = norm(" ".join(job_text.get(x, "") for x in set(sibs) | {job["id"]}))
+    if re.search(r"\bpre(v|vailing)?\s*wage\b", text):
+        score += 15; reasons.append("Shipping also marks it prevailing wage")
+    street = re.match(r"^(\d{2,})\s+(?:[nsew]\s+|north\s+|south\s+|east\s+|west\s+)?(\w+)", norm(pw_address or ""))
+    if street and street.group(1) in text.split() and street.group(2)[:4] in text:
+        score += 15; reasons.append(f"Street address matches ({street.group(1)} {street.group(2).title()})")
+    elif pw_city and norm(pw_city) in text:
+        score += 10; reasons.append(f"City matches ({pw_city})")
+    elif pw_city:
+        reasons.append("No location in shipping records to compare")
+    return max(5, min(99, round(score))), reasons
 # PW-list customer -> how the same company is spelled in the shipping data
 PW_COMPANY_SAME_AS = {"2020 plumbing": "20/20 Plumbing & Heating Inc.", "icg intergration construction": "ICG Incorporated",
                       "lovazzano": "Lovazzano Mechanical, Inc."}
@@ -466,7 +503,9 @@ for cust_raw, job_raw in pw_rows:
     jk = job_key(name)
     match, how = None, ""
     if jk in PW_JOB_SAME_AS:
-        match, how = job_by_key[job_key(PW_JOB_SAME_AS[jk])], "named match (check)"
+        target = job_key(PW_JOB_SAME_AS[jk])
+        match = next((j for (c, k), j in jobs.items() if k == target and c == cust_id), job_by_key[target])
+        how = "named match (check)"
         if match["customer_id"] != cust_id:
             parties.append([q(match["id"]), q(cust_id), q("contractor"), q("From PW list")])
     cands = jobs_by_company.get(cust_id, [])
@@ -486,7 +525,8 @@ for cust_raw, job_raw in pw_rows:
             new_job_aliases.append([q(jid), q(name), q("pw_list")])
         review_pw.append([cust_raw, job_raw, "matched", match["name"], how])
         if not how.endswith("100%"):
-            pw_to_confirm.append((uid("pw", jid), f"PW list says “{cust_raw} – {job_raw}” · matched to “{match['name']}” ({company_name.get(match['customer_id'], '')}) · {how}"))
+            conf, why = match_confidence(name, city, address, cust_id, match)
+            pw_to_confirm.append((uid("pw", jid), f"PW list says “{cust_raw} – {job_raw}” · matched to “{match['name']}” ({company_name.get(match['customer_id'], '')})", conf, why))
     else:
         jid = uid("job", "pw", cust_id, jk)
         new_jobs[jid] = (name, cust_id, address, city, note)
@@ -504,11 +544,16 @@ p4 = [
     inserts("prevailing_wage_periods", ["id", "job_id", "effective_from", "source_note"], periods),
     # matches a person should confirm (columns arrive with migration 0009; skipped quietly if it isn't run yet)
     "do $$ begin\n  if exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'prevailing_wage_periods' and column_name = 'needs_review') then\n"
-    + "\n".join(f"    update public.prevailing_wage_periods set needs_review = true, match_note = {q(n)} where id = {q(i)} and reviewed_at is null;" for i, n in pw_to_confirm)
+    + "\n".join(f"    update public.prevailing_wage_periods set needs_review = true, match_note = {q(n)} where id = {q(i)} and reviewed_at is null;" for i, n, *_ in pw_to_confirm)
+    + "\n  end if;\n"
+    + "  if exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'prevailing_wage_periods' and column_name = 'match_confidence') then\n"
+    + "\n".join(f"    update public.prevailing_wage_periods set match_confidence = {c}, match_reasons = {qa(r)} where id = {q(i)};" for i, n, c, r in pw_to_confirm)
     + "\n  end if;\nend $$;",
 ]
-open(os.path.join(out_dir, "_pw_to_confirm.sql"), "w").write("\n".join(
-    f"update public.prevailing_wage_periods set needs_review = true, match_note = {q(n)} where id = {q(i)} and reviewed_at is null;" for i, n in pw_to_confirm) + "\n")
+open(os.path.join(out_dir, "_pw_confidence.sql"), "w").write("\n".join(
+    f"update public.prevailing_wage_periods set match_confidence = {c}, match_reasons = {qa(r)} where id = {q(i)};" for i, n, c, r in pw_to_confirm) + "\n")
+for i, n, c, r in sorted(pw_to_confirm, key=lambda x: -x[2]):
+    print(f"  {c:3d}%  {n.split(' · matched to ')[1][:60]:60s} | {'; '.join(r)}")
 sizes["04_prevailing_wage.sql"] = write("04_prevailing_wage.sql", p4, "4 of 5 · Prevailing wage jobs (matched to existing jobs or created) and PW flags")
 with open(os.path.join(out_dir, "pw_import_review.csv"), "w", newline="") as f:
     w = csv.writer(f)

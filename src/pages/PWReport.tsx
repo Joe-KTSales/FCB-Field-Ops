@@ -6,10 +6,10 @@ import { supabase, must, BUCKET } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth';
 import { mdy, mondayOf, monthDay, shift, shortDate, stamp, todayIso } from '@/lib/dates';
 import JobPicker, { type PickedJob } from '@/components/JobPicker';
-import { Button, Card, ErrorBox, Field, Spinner, inputCls } from '@/components/ui';
+import { Button, Card, ErrorBox, Field, Spinner, cx, inputCls } from '@/components/ui';
 
 interface Row { customer: string; job: string; job_id: string; work_date: string; employee: string; employee_code: string | null; employee_id: string | null; work_order_number: string; unmatched: boolean }
-interface Period { id: string; effective_from: string; effective_to: string | null; source_note: string | null; needs_review: boolean; match_note: string | null; job: { id: string; name: string; city: string | null; customer: { name: string } } }
+interface Period { id: string; effective_from: string; effective_to: string | null; source_note: string | null; needs_review: boolean; match_note: string | null; match_confidence: number | null; match_reasons: string[] | null; job: { id: string; name: string; city: string | null; customer: { name: string } } }
 
 function groupRows(rows: Row[]) {
   const m = new Map<string, { title: string; rows: Row[] }>();
@@ -86,7 +86,7 @@ export default function PWReport() {
   const periods = useQuery({
     queryKey: ['pw-periods'],
     queryFn: async () =>
-      must(await supabase.from('prevailing_wage_periods').select('id, effective_from, effective_to, source_note, needs_review, match_note, job:jobs(id, name, city, customer:companies(name))').order('effective_from', { ascending: false })) as unknown as Period[],
+      must(await supabase.from('prevailing_wage_periods').select('id, effective_from, effective_to, source_note, needs_review, match_note, match_confidence, match_reasons, job:jobs(id, name, city, customer:companies(name))').order('effective_from', { ascending: false })) as unknown as Period[],
   });
   const history = useQuery({
     queryKey: ['pw-history'],
@@ -100,7 +100,7 @@ export default function PWReport() {
   });
 
   const groups = useMemo(() => groupRows(rows.data ?? []), [rows.data]);
-  const toConfirm = (periods.data ?? []).filter((p) => p.needs_review);
+  const toConfirm = (periods.data ?? []).filter((p) => p.needs_review).sort((a, b) => (b.match_confidence ?? -1) - (a.match_confidence ?? -1));
   const [listFilter, setListFilter] = useState('');
   const { session } = useAuth();
   const unmatched = (rows.data ?? []).filter((r) => r.unmatched);
@@ -153,11 +153,39 @@ export default function PWReport() {
         {toConfirm.length > 0 && (
           <Card className="flex flex-col gap-3 border-amber-300 p-4">
             <h2 className="text-base font-bold">Matches to confirm · {toConfirm.length}</h2>
-            <p className="text-[13px] text-slate-600">These PW list lines were linked to an existing job by a similar name. Confirm each one, or unlink it and add the right job below.</p>
+            <p className="text-[13px] text-slate-600">These PW list lines were linked to an existing job by a similar name. Confirm each one, or unlink it and add the right job below. The score weighs name similarity, same customer, whether shipping also marks the job prevailing wage, and whether the address or city matches.</p>
             {toConfirm.map((p) => (
               <div key={p.id} className="flex flex-col gap-2 rounded-lg bg-amber-50 p-3 text-sm">
-                <div><Link to={`/jobs/${p.job.id}`} className="font-semibold text-slate-900">{p.job.name}</Link> <span className="text-slate-600">· {p.job.customer.name}{p.job.city ? ` · ${p.job.city}` : ''}</span></div>
-                {p.match_note && <div className="text-[13px] text-slate-700">{p.match_note}</div>}
+                <div className="flex items-start gap-3">
+                  {p.match_confidence != null && (
+                    <div
+                      className={cx('flex w-16 shrink-0 flex-col items-center rounded-md px-1 py-1.5 text-center',
+                        p.match_confidence >= 85 ? 'bg-green-100 text-green-900' : p.match_confidence >= 60 ? 'bg-amber-100 text-amber-900' : 'bg-red-100 text-red-900')}
+                      aria-label={`Match confidence ${p.match_confidence} percent`}
+                    >
+                      <span className="text-lg leading-none font-bold">{p.match_confidence}%</span>
+                      <span className="mt-0.5 text-[10px] font-semibold tracking-wide uppercase">{p.match_confidence >= 85 ? 'likely' : p.match_confidence >= 60 ? 'check' : 'doubtful'}</span>
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <div><Link to={`/jobs/${p.job.id}`} className="font-semibold text-slate-900">{p.job.name}</Link> <span className="text-slate-600">· {p.job.customer.name}{p.job.city ? ` · ${p.job.city}` : ''}</span></div>
+                    {p.match_note && <div className="text-[13px] text-slate-700">{p.match_note.split(' · matched to ')[0]}</div>}
+                  </div>
+                </div>
+                {p.match_reasons && p.match_reasons.length > 0 && (
+                  <ul className="flex flex-col gap-0.5 pl-1 text-[13px]">
+                    {p.match_reasons.map((r) => {
+                      const good = /Same customer|also marks|matches/.test(r) || /Names (9\d|100)%/.test(r);
+                      const bad = /Different customer/.test(r);
+                      return (
+                        <li key={r} className="flex items-start gap-1.5">
+                          <span aria-hidden="true" className={cx('mt-0.5 font-bold', good ? 'text-green-700' : bad ? 'text-red-700' : 'text-slate-500')}>{good ? '✓' : bad ? '✕' : '–'}</span>
+                          <span className="text-slate-800">{r}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
                 <div className="flex gap-2">
                   <Button size="sm" variant="success" onClick={() => run.mutate(async () => must(await supabase.from('prevailing_wage_periods').update({ needs_review: false, reviewed_at: new Date().toISOString(), reviewed_by: session?.user.id }).eq('id', p.id)))}>Correct</Button>
                   <Button size="sm" variant="danger" onClick={() => { if (confirm(`Unlink "${p.job.name}" from the PW list? It will no longer count as prevailing wage.`)) run.mutate(async () => must(await supabase.from('prevailing_wage_periods').delete().eq('id', p.id))); }}>Wrong job — unlink</Button>

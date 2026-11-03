@@ -95,17 +95,17 @@ insert into public.employee_aliases (employee_id, alias, source) values
 on conflict do nothing;
 
 insert into public.crews (id, name, department, color, sort_order) values
-  ('e9128924-8a16-534c-9955-45f7df0a6800', 'Gilberto', 'socal-install', '#2563eb', 0),
-  ('37a32c8f-d199-5ffe-af7e-977de4bad9c5', 'Jose F.', 'socal-install', '#7c3aed', 1),
-  ('964aec28-6f17-5f6a-84dc-6ce058466750', 'Javier', 'socal-install', '#0891b2', 2),
-  ('ad1ef9d9-018f-5a62-9346-755d3baaa997', 'Narciso', 'socal-install', '#db2777', 3),
-  ('7e53e14a-6ad8-5c46-b102-7535d349e914', 'Ascencion', 'socal-install', '#ea580c', 4),
-  ('7cae9418-19bd-5485-ba3b-bf3263115790', 'Daniel', 'socal-install', '#16a34a', 5),
-  ('d7140620-bf72-53a6-9cf3-6988976c5aa9', 'Roberto', 'socal-install', '#ca8a04', 6),
-  ('6a539cdb-cae2-5446-9a99-3bf84856a8e0', 'Agustin', 'socal-install', '#4f46e5', 7),
+  ('e9128924-8a16-534c-9955-45f7df0a6800', 'Gilberto Arellano', 'socal-install', '#2563eb', 0),
+  ('37a32c8f-d199-5ffe-af7e-977de4bad9c5', 'Jose Flores-Zamarripa', 'socal-install', '#7c3aed', 1),
+  ('964aec28-6f17-5f6a-84dc-6ce058466750', 'Francisco Javier Jimenez', 'socal-install', '#0891b2', 2),
+  ('ad1ef9d9-018f-5a62-9346-755d3baaa997', 'Narciso Flores', 'socal-install', '#db2777', 3),
+  ('7e53e14a-6ad8-5c46-b102-7535d349e914', 'Ascencion Perez', 'socal-install', '#ea580c', 4),
+  ('7cae9418-19bd-5485-ba3b-bf3263115790', 'Daniel Zabala', 'socal-install', '#16a34a', 5),
+  ('d7140620-bf72-53a6-9cf3-6988976c5aa9', 'Roberto Martinez', 'socal-install', '#ca8a04', 6),
+  ('6a539cdb-cae2-5446-9a99-3bf84856a8e0', 'Agustin Contreras', 'socal-install', '#4f46e5', 7),
   ('11d1ad88-5de8-5d6d-bd98-aaeb499b47b3', 'Jose Rea', 'socal-stocking', '#059669', 8),
-  ('0e705dcb-5c06-5031-a4ee-9dc3483bfbae', 'Luis', 'socal-stocking', '#0d9488', 9),
-  ('4e0bb540-e821-5744-aaf5-a8b5b630ad75', 'Marco', 'socal-stocking', '#65a30d', 10)
+  ('0e705dcb-5c06-5031-a4ee-9dc3483bfbae', 'Luis Amapa', 'socal-stocking', '#0d9488', 9),
+  ('4e0bb540-e821-5744-aaf5-a8b5b630ad75', 'Marco Valadez Gutierrez', 'socal-stocking', '#65a30d', 10)
 on conflict do nothing;
 
 insert into public.crew_default_members (crew_id, employee_id, position) values
