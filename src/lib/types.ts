@@ -80,6 +80,15 @@ export interface Employee {
   active: boolean;
 }
 
+export interface Department {
+  code: string;
+  region: string;
+  name: string;
+  work_type: WoType | null;
+  sort_order: number;
+  active: boolean;
+}
+
 export interface Crew {
   id: string;
   name: string;

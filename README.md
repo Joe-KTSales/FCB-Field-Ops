@@ -90,9 +90,26 @@ Useful functions and views:
 
 Everything goes in one private bucket, `job-files`, opened with signed URLs. Photos get a small WebP thumbnail at upload, so galleries stay fast. Each file's `provider` column (`supabase` | `cloudflare_stream` | `r2`) lets video move to Cloudflare later without changing the database.
 
-### Test data
+### Loading data
 
-- `supabase/seed/01_reference.sql`: the Base44 shipping export (4.8 MB). Use `psql`, or split it.
-- `supabase/seed/02_field_test.sql`: test crews and work orders from the 10/29–10/30 paperwork. Employee codes are `TEST-###`.
-- `scripts/build_seed.py`: regenerates both.
-- `company_groups_review.csv`: how the 384 customer spellings were grouped into 233 companies.
+Run these in the Supabase SQL Editor in order. Each one is safe to run twice.
+
+| File | What it loads |
+|---|---|
+| `supabase/migrations/…0008_departments.sql` | The 6 departments (dispatch tabs) |
+| `supabase/seed/01_customers_jobs_products.sql` | 248 companies, 1,081 jobs, 767 products and molds from the shipping app |
+| `supabase/seed/02_shipments_part1–3.sql` | 4,011 shipments and 12,680 line items |
+| `supabase/seed/03_employees_crews.sql` | 53 employees with name spellings, and 11 usual crews |
+| `supabase/seed/04_prevailing_wage.sql` | 93 PW jobs: 23 matched to existing jobs, 70 created with addresses, all flagged |
+| `supabase/seed/05_test_day_oct29_30.sql` | **Test data**: the 10/29–10/30 paperwork as work orders 9001+ |
+| `supabase/seed/99_remove_test_day.sql` | Removes only the test-day work orders and rosters |
+
+Review files:
+- `company_groups_review.csv`: how the 384 customer spellings were grouped
+- `pw_import_review.csv`: how each PW line was matched
+
+To regenerate everything:
+
+```
+python3 scripts/build_seed.py <Base44 CSV dir> scripts/transcription_10-29_10-30.json <employees.xlsx> <pw.xlsx> supabase/seed
+```

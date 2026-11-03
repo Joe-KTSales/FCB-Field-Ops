@@ -8,12 +8,12 @@ import JobPicker, { type PickedJob } from './JobPicker';
 import { Button, ErrorBox, Field, Modal, TYPE_META, cx, inputCls } from './ui';
 
 export default function NewWorkOrder({
-  open, onClose, defaultDate, defaultJob, defaultCrewId,
-}: { open: boolean; onClose: () => void; defaultDate?: string; defaultJob?: PickedJob | null; defaultCrewId?: string }) {
+  open, onClose, defaultDate, defaultJob, defaultCrewId, defaultType,
+}: { open: boolean; onClose: () => void; defaultDate?: string; defaultJob?: PickedJob | null; defaultCrewId?: string; defaultType?: WoType | null }) {
   const qc = useQueryClient();
   const nav = useNavigate();
   const crews = useCrews();
-  const [type, setType] = useState<WoType>('IN');
+  const [type, setType] = useState<WoType>(defaultType ?? 'IN');
   const [job, setJob] = useState<PickedJob | null>(defaultJob ?? null);
   const [date, setDate] = useState(defaultDate ?? '');
   const [crewId, setCrewId] = useState(defaultCrewId ?? '');

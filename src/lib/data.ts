@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase, must } from './supabase';
-import type { Crew, Employee, FlagType } from './types';
+import type { Crew, Department, Employee, FlagType } from './types';
 
 export function useCrews() {
   return useQuery({
@@ -8,6 +8,17 @@ export function useCrews() {
     queryFn: async () => must(await supabase.from('crews').select('*').order('sort_order').order('name')) as Crew[],
   });
 }
+
+export function useDepartments() {
+  return useQuery({
+    queryKey: ['departments'],
+    staleTime: 60 * 60 * 1000,
+    queryFn: async () => must(await supabase.from('departments').select('*').eq('active', true).order('sort_order')) as Department[],
+  });
+}
+
+const REGION_SHORT: Record<string, string> = { 'Southern California': 'SoCal', 'Northern California': 'NorCal', 'Las Vegas': 'Vegas' };
+export const deptLabel = (d: Department | undefined) => (d ? `${REGION_SHORT[d.region] ?? d.region} ${d.name}` : '');
 
 export function useEmployees() {
   return useQuery({

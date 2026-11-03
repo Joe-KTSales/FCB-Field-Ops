@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { endOfMonth, endOfWeek, format, parseISO, startOfMonth, startOfWeek } from 'date-fns';
 import { supabase, must } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth';
-import { assignWorkOrder, useCrews } from '@/lib/data';
+import { assignWorkOrder, deptLabel, useCrews, useDepartments } from '@/lib/data';
 import { dayLabel, iso, monthDay, mondayOf, shift, todayIso, weekDays } from '@/lib/dates';
 import type { BoardCrewDay, BoardStop, WoStatus, WoType } from '@/lib/types';
 import { ErrorBox, PwBadge, Spinner, TYPE_META, cx } from '@/components/ui';
@@ -92,6 +92,7 @@ export default function Week() {
   const [rowsBy, setRowsBy] = useState<'crews' | 'jobs'>('crews');
   const [pwOnly, setPwOnly] = useState(false);
   const [dept, setDept] = useState('all');
+  const departments = useDepartments();
   const crews = useCrews();
   const set = (p: Record<string, string>) => setParams({ date: anchor, range, ...p });
 
@@ -142,7 +143,8 @@ export default function Week() {
         {range === 'week' && (
           <>
             <select aria-label="Department" value={dept} onChange={(e) => setDept(e.target.value)} className="min-h-10 rounded-md border border-slate-300 bg-white px-2 text-sm">
-              <option value="all">All departments</option><option value="install">Install</option><option value="stocking">Stocking</option><option value="finals">Finals</option>
+              <option value="all">All departments</option>
+              {(departments.data ?? []).map((d) => <option key={d.code} value={d.code}>{deptLabel(d)}</option>)}
             </select>
             <div role="group" aria-label="Rows" className="flex gap-1 rounded-lg bg-slate-200 p-1">
               {(['crews', 'jobs'] as const).map((r) => (

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase, must } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth';
-import { useCrews, useEmployees } from '@/lib/data';
+import { deptLabel, useCrews, useDepartments, useEmployees } from '@/lib/data';
 import { stamp } from '@/lib/dates';
 import { Button, Card, ErrorBox, Field, Modal, Spinner, cx, inputCls } from '@/components/ui';
 
@@ -11,10 +11,11 @@ const COLORS = ['#2563EB', '#7C3AED', '#0891B2', '#DB2777', '#EA580C', '#16A34A'
 function EmployeeModal({ id, onClose }: { id: string | 'new'; onClose: () => void }) {
   const qc = useQueryClient();
   const emps = useEmployees();
+  const departments = useDepartments();
   const e = id === 'new' ? null : emps.data?.find((x) => x.id === id);
   const [f, setF] = useState({
     first_name: e?.first_name ?? '', last_name: e?.last_name ?? '', employee_code: e?.employee_code ?? '',
-    default_position: e?.default_position ?? 'helper', departments: e?.departments ?? ['install'], active: e?.active ?? true,
+    default_position: e?.default_position ?? 'helper', departments: e?.departments ?? [], active: e?.active ?? true,
   });
   const [alias, setAlias] = useState('');
   const aliases = useQuery({
@@ -54,9 +55,9 @@ function EmployeeModal({ id, onClose }: { id: string | 'new'; onClose: () => voi
           </Field>
         </div>
         <div className="flex flex-wrap gap-4 text-sm">
-          {['install', 'stocking', 'finals', 'shipping'].map((d) => (
-            <label key={d} className="flex items-center gap-2 capitalize"><input type="checkbox" className="h-5 w-5" checked={f.departments.includes(d)} onChange={(x) => setF({ ...f, departments: x.target.checked ? [...f.departments, d] : f.departments.filter((y) => y !== d) })} />{d}</label>
-          ))}
+          {(departments.data ?? []).map((dd) => { const d = dd.code; return (
+            <label key={d} className="flex items-center gap-2"><input type="checkbox" className="h-5 w-5" checked={f.departments.includes(d)} onChange={(x) => setF({ ...f, departments: x.target.checked ? [...f.departments, d] : f.departments.filter((y) => y !== d) })} />{deptLabel(dd)}</label>
+          ); })}
           <label className="flex items-center gap-2 font-semibold"><input type="checkbox" className="h-5 w-5" checked={f.active} onChange={(x) => setF({ ...f, active: x.target.checked })} />Active</label>
         </div>
         {id !== 'new' && (
@@ -97,7 +98,10 @@ export default function Crews() {
   const emps = useEmployees();
   const [tab, setTab] = useState<'crews' | 'people' | 'callouts'>('crews');
   const [edit, setEdit] = useState<string | 'new' | null>(null);
-  const [newCrew, setNewCrew] = useState({ name: '', department: 'install' });
+  const departments = useDepartments();
+  const [newCrew, setNewCrew] = useState({ name: '', department: 'socal-install' });
+  const deptName = (code: string) => deptLabel(departments.data?.find((d) => d.code === code)) || code;
+  const [deptFilter, setDeptFilter] = useState('all');
   const [filter, setFilter] = useState('');
 
   const members = useQuery({
@@ -144,7 +148,7 @@ export default function Crews() {
                     <input type="color" aria-label="Crew color" disabled={!canEdit} value={c.color ?? '#64748B'} onChange={(e) => run.mutate(async () => must(await supabase.from('crews').update({ color: e.target.value }).eq('id', c.id)))} className="h-7 w-7 rounded border-0 p-0" />
                     <input aria-label="Crew name" disabled={!canEdit} defaultValue={c.name} onBlur={(e) => e.target.value !== c.name && run.mutate(async () => must(await supabase.from('crews').update({ name: e.target.value }).eq('id', c.id)))} className="min-h-9 flex-1 rounded border border-transparent px-1 text-base font-bold hover:border-slate-300" />
                     <select aria-label="Department" disabled={!canEdit} value={c.department ?? ''} onChange={(e) => run.mutate(async () => must(await supabase.from('crews').update({ department: e.target.value }).eq('id', c.id)))} className="min-h-9 rounded border border-slate-300 bg-white px-1 text-sm">
-                      <option value="install">Install</option><option value="stocking">Stocking</option><option value="finals">Finals</option>
+                      {(departments.data ?? []).map((d) => <option key={d.code} value={d.code}>{deptLabel(d)}</option>)}
                     </select>
                   </div>
                   {ms.map((m) => (
@@ -177,7 +181,7 @@ export default function Crews() {
                 <b className="text-sm">New crew</b>
                 <input aria-label="New crew name" className={inputCls} placeholder="Usually the lead’s name" value={newCrew.name} onChange={(e) => setNewCrew({ ...newCrew, name: e.target.value })} />
                 <select aria-label="New crew department" className={inputCls} value={newCrew.department} onChange={(e) => setNewCrew({ ...newCrew, department: e.target.value })}>
-                  <option value="install">Install</option><option value="stocking">Stocking</option><option value="finals">Finals</option>
+                  {(departments.data ?? []).map((d) => <option key={d.code} value={d.code}>{deptLabel(d)}</option>)}
                 </select>
                 <Button size="sm" variant="primary" disabled={!newCrew.name.trim()} onClick={() => run.mutate(async () => {
                   must(await supabase.from('crews').insert({ ...newCrew, color: COLORS[(crews.data?.length ?? 0) % COLORS.length], sort_order: crews.data?.length ?? 0 }));
@@ -194,20 +198,24 @@ export default function Crews() {
         <>
           <div className="flex flex-wrap gap-2">
             <input aria-label="Filter employees" className={inputCls + ' max-w-sm flex-1'} placeholder="Filter…" value={filter} onChange={(e) => setFilter(e.target.value)} />
+            <select aria-label="Department filter" className={inputCls} value={deptFilter} onChange={(e) => setDeptFilter(e.target.value)}>
+              <option value="all">All departments</option>
+              {(departments.data ?? []).map((d) => <option key={d.code} value={d.code}>{deptLabel(d)}</option>)}
+            </select>
             {canEdit && <Button variant="primary" onClick={() => setEdit('new')}>+ Add employee</Button>}
           </div>
           <Card className="overflow-x-auto">
             <table className="w-full min-w-[600px] text-left text-sm">
               <thead className="border-b border-slate-300 bg-slate-50 text-xs tracking-wider text-slate-600 uppercase"><tr><th className="px-3 py-2.5">Name</th><th className="px-3">Payroll ID</th><th className="px-3">Usually</th><th className="px-3">Departments</th><th className="px-3">Usual crew</th><th className="px-3" /></tr></thead>
               <tbody>
-                {(emps.data ?? []).filter((e) => !filter || e.display_name.toLowerCase().includes(filter.toLowerCase())).map((e) => {
+                {(emps.data ?? []).filter((e) => (!filter || e.display_name.toLowerCase().includes(filter.toLowerCase())) && (deptFilter === 'all' || e.departments.includes(deptFilter))).map((e) => {
                   const crew = crews.data?.find((c) => members.data?.some((m) => m.crew_id === c.id && m.employee_id === e.id));
                   return (
                     <tr key={e.id} className={cx('border-b border-slate-100', !e.active && 'text-slate-400')}>
                       <td className="px-3 py-2.5 font-semibold">{e.display_name}{!e.active && ' (inactive)'}</td>
                       <td className="px-3 font-mono text-[13px]">{e.employee_code}</td>
                       <td className="px-3 capitalize">{e.default_position}</td>
-                      <td className="px-3 capitalize">{e.departments.join(', ')}</td>
+                      <td className="px-3">{e.departments.map(deptName).join(', ')}</td>
                       <td className="px-3">{crew?.name}</td>
                       <td className="px-3">{canEdit && <button className="text-brand-dark underline" onClick={() => setEdit(e.id)}>Edit</button>}</td>
                     </tr>

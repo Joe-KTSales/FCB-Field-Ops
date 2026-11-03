@@ -3,19 +3,13 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase, must } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth';
-import { assignWorkOrder, putMemberOnCrewDay, unassignStop, useCrews, useEmployees } from '@/lib/data';
+import { assignWorkOrder, deptLabel, putMemberOnCrewDay, unassignStop, useCrews, useDepartments, useEmployees } from '@/lib/data';
 import { clock, longDate, shift, shortDate, todayIso } from '@/lib/dates';
 import type { BoardCrewDay, BoardMember, BoardStop, TrayItem, WoStatus } from '@/lib/types';
 import NewWorkOrder from '@/components/NewWorkOrder';
 import WorkOrderDrawer from '@/components/WorkOrderDrawer';
 import { Button, ErrorBox, PwBadge, SectionLabel, Spinner, StatusText, TypePill, cx } from '@/components/ui';
 
-const DEPTS = [
-  ['all', 'All'],
-  ['install', 'Install'],
-  ['stocking', 'Stocking'],
-  ['finals', 'Finals'],
-] as const;
 
 function MemberChip({ m, onToggle, disabled }: { m: BoardMember; onToggle: () => void; disabled: boolean }) {
   const out = m.status === 'called_out' || m.status === 'no_show';
@@ -108,7 +102,11 @@ export default function Dispatch() {
   const qc = useQueryClient();
   const [params, setParams] = useSearchParams();
   const date = params.get('date') || todayIso();
-  const [dept, setDept] = useState<string>('all');
+  const [dept, setDeptState] = useState<string>(() => {
+    try { return localStorage.getItem('fcb-dispatch-dept') || 'all'; } catch { return 'all'; }
+  });
+  const setDept = (d: string) => { setDeptState(d); try { localStorage.setItem('fcb-dispatch-dept', d); } catch { /* private mode */ } };
+  const departments = useDepartments();
   const [sel, setSel] = useState<string | null>(null);
   const [newOpen, setNewOpen] = useState(false);
   const [dropTarget, setDropTarget] = useState<string | null>(null);
@@ -200,9 +198,9 @@ export default function Dispatch() {
           <input aria-label="Pick a date" type="date" value={date} onChange={(e) => e.target.value && setDate(e.target.value)} className="ml-2 min-h-10 rounded-md border border-slate-300 bg-white px-2 text-sm" />
           {date !== todayIso() && <Button size="sm" variant="ghost" onClick={() => setDate(todayIso())}>Today</Button>}
         </div>
-        <div role="group" aria-label="Department" className="flex gap-1 rounded-lg bg-slate-200 p-1">
-          {DEPTS.map(([k, label]) => (
-            <button key={k} onClick={() => setDept(k)} className={cx('min-h-9 rounded-md px-3.5 text-sm font-semibold', dept === k ? 'bg-white shadow-sm' : 'text-slate-600')}>
+        <div role="group" aria-label="Department" className="flex flex-wrap gap-1 rounded-lg bg-slate-200 p-1">
+          {[['all', 'All'] as [string, string], ...(departments.data ?? []).map((d) => [d.code, deptLabel(d)] as [string, string])].map(([k, label]) => (
+            <button key={k} onClick={() => setDept(k)} className={cx('min-h-9 rounded-md px-3 text-sm font-semibold whitespace-nowrap', dept === k ? 'bg-white shadow-sm' : 'text-slate-600')}>
               {label} · {deptCount(k)}
             </button>
           ))}
@@ -333,7 +331,7 @@ export default function Dispatch() {
         )}
       </div>
 
-      {newOpen && <NewWorkOrder open onClose={() => setNewOpen(false)} defaultDate={date} />}
+      {newOpen && <NewWorkOrder open onClose={() => setNewOpen(false)} defaultDate={date} defaultType={departments.data?.find((d) => d.code === dept)?.work_type} />}
     </div>
   );
 }

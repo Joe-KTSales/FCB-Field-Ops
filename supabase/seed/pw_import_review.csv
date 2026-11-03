@@ -1,0 +1,95 @@
+customer_on_pw_list,job_on_pw_list,result,job_in_app,detail
+2020 Plumbing,"327 HARBOR APTS, 327 Harbor Blvd, San Pedro, CA 90732",created,327 HARBOR APTS,San Pedro
+2020 Plumbing,"HUNTINGTON BEACH OASIS, 17251 Beach Blvd, Huntington Beach, CA 92647",created,HUNTINGTON BEACH OASIS,Huntington Beach
+2020 Plumbing,"HUNTINGTON BEACH SENIOR HOUSING, 18431 Beach Blvd, Huntington Beach, CA",created,HUNTINGTON BEACH SENIOR HOUSING,Huntington Beach
+2020 Plumbing,"LINDEN APTS, 946 Linden Ave, Long Beach, CA",created,LINDEN APTS,Long Beach
+2020 Plumbing,"MANCHESTER URBAN HOMES, 8721 S Broadway, Los Angeles, CA 90003",created,MANCHESTER URBAN HOMES,Los Angeles
+2020 Plumbing,"PRISMA ARTIST'S LOFTS, 501 E Mission Blvd, Pomona, CA 91766",matched,Prisma Lofts,named match (check)
+2020 Plumbing,THE 101 APARTMENTS,matched,101 Apartments,same customer · 80%
+2020 Plumbing,"TRIANGLE SQUARE, 1602 N Ivar Ave, Los Angeles, CA 90028",created,TRIANGLE SQUARE,Los Angeles
+Aphaia Mechanical Corp,"NORMANDIE APTS, 9426 S Normandie Ave, Los Angeles, CA 90044",created,NORMANDIE APTS,Los Angeles
+Aphaia Mechanical Corp,"THE GARVEY, 1434 W Compton Blvd, Compton, CA 90220",matched,GARVEY,same customer · 75%
+Aphaia Mechanical Corp,"THE JOURNEY, 2469-2471 Lincoln Blvd, Venice, CA 90291",created,THE JOURNEY,Venice
+Baskerville Parsons Contractor,"SCOTTS VALLEY APTS, 4575 Scotts Valley Dr, Scotts Valley, CA",matched,SCOTTS VALLEY APTS.,same customer · 100%
+C&C Construction Services,"THE LINCOLN AVE APTS, 7101 Lincoln Ave, Buena Park, CA 90620",created,THE LINCOLN AVE APTS,Buena Park
+Dano Specialties,"AVANZANDO SAN YSIDRO, 317 Cottonwood Rd & 125 Cypress Dr, San Ysidro, CA 92173",created,AVANZANDO SAN YSIDRO,San Ysidro
+Dano Specialties,"BELL RANCH, 32650 MESA DRIVE, LAKE ELSINORE, CA 92530",matched,Bell Ranch,same customer · 100%
+Dano Specialties,"RB TRANSIT - SKYLINE PROJECT, 11673-11675 George Cooke Express Dr, San Diego, CA  (PLA)",created,RB TRANSIT - SKYLINE PROJECT,San Diego
+Dano Specialties,"SHORELINE, 4470 Alvarado Canyon Rd, San Diego, CA 92120",created,SHORELINE,San Diego
+Davis Construction,"ALMA, 3520 E 1st St, Los Angeles, CA 90063",created,ALMA,Los Angeles
+Davis Construction,"THE QUINCY, 2652 W Pico Blvd, Los Angeles, CA 90006",created,THE QUINCY,Los Angeles
+Davis Construction,"THE WILCOX, 1040 Kenmore Ave, Los Angeles, CA 90029",created,THE WILCOX,Los Angeles
+DG Plumbing,"ULRIC STREET APTS II, 2601 Ulric St, San Diego",created,ULRIC STREET APTS II,San Diego
+Don Brandel,"600 SAN PEDRO PHASE 1 & 2,  600 South San Pedro St, Los Angeles, CA 90021",created,600 SAN PEDRO PHASE 1 & 2,Los Angeles
+Edgington Plumbing,BELMONT AVE,created,BELMONT AVE,
+Edgington Plumbing,MERIDIAN,created,MERIDIAN,
+Everic,"MIRAMAR GOLD, 1434 W Miramar St, Los Angeles",created,MIRAMAR GOLD,Los Angeles
+Frank Marrone & Sons,"L.A. CADA, 3599 Norton Ave, Lynwood, CA 90013",created,L.A. CADA,Lynwood
+George Bics Plumbing,"COLLEGE COMMUNITY COURTS, 4300 Telegraph Rd, Ventura, CA 93003",matched,College Community Courts,same customer · 100%
+George Bics Plumbing,"SUNSET ROSE SENIOR, 704 E Third St, Holtville, CA 92250",created,SUNSET ROSE SENIOR,Holtville
+GPS Plumbing,"KIMBALL HIGHLAND EAST, 1221 D St, National City, CA 91950",created,KIMBALL HIGHLAND EAST,National City
+GPS Plumbing,"SOUTHWEST VILLAGE APTS, 323 Willie James Jones Ave, San Diego, CA 92102",created,SOUTHWEST VILLAGE APTS,San Diego
+GPS Plumbing,"TRANQUILITY AT POST 310, 465 47TH St, San Diego, CA 92102",created,TRANQUILITY AT POST 310,San Diego
+Harbinger,"THE NEST ON EXPOSITION (WELLNEST), 3787 S Vermont Ave, LA",created,THE NEST ON EXPOSITION,Los Angeles
+ICG (Intergration Construction),"7TH AVENUE VILLAGE, 1172 S 7th Ave, Hacienda Heights, CA 91745",created,7TH AVENUE VILLAGE,Hacienda Heights
+ICG (Intergration Construction),"CAMBERN AVE APTS, 29366 & 29377 3rd St, Lake Elsinore, CA 92532",matched,3rd and Cambern Avenue Apartments,named match (check)
+Imperial T & S Plumbing,"20th STREET APARTMENTS, 1634 20th Street, Santa Monica, CA 90404",matched,20th St. Apts.,same customer · 86%
+Imperial T & S Plumbing,"ALVARADO KENT APTS, 715 North Alvarado St, Los Angeles, CA 90026",created,ALVARADO KENT APTS,Los Angeles
+Imperial T & S Plumbing,GRACE VILLAS - KT SALES,matched,Grace Villas,same customer · 100%
+Imperial T & S Plumbing,"LINCOLN BEACH, 208 South Beach Blvd, Anaheim, CA 92805",matched,Lincoln Beach PREV. WAGE/TURNKEY,same customer · 72%
+Imperial T & S Plumbing,"PEAK PLAZA APTS, 316 E Washington Blvd, Los Angeles CA 90015",matched,Peak Plaza,same customer · 80%
+James Plumbing,"CENTRAL AVE APTS, 8923 S Central Ave, Los Angeles, CA 90002",created,CENTRAL AVE APTS,Los Angeles
+James Plumbing,"HARBOR VIEW PLACE, 326-327 King Ave, Los Angeles CA 90744",matched,Harbor View Place Apts.,same customer · 87%
+James Plumbing,"LOS ROBLES APTS, 1199 N Main St, Manteca, CA",created,LOS ROBLES APTS,Manteca
+JR Pierce,"LINCOLN STREET FAMILY APTS, 3300 Lincoln Blvd, Oroville, CA 95966",created,LINCOLN STREET FAMILY APTS,Oroville
+JR Pierce,"THE HUDDLE ON 5TH, 221 5th Street, West Sacramento, CA 95605",created,THE HUDDLE ON 5TH,West Sacramento
+KB Engineering,"LAKE HOUSE, 437 & 503 South Ave, Los Angeles, CA 90059",created,LAKE HOUSE,Los Angeles
+KB Engineering,"SIX FORTY NINE LOFTS, 649 Wall Street, Los Angeles, CA 90014",created,SIX FORTY NINE LOFTS,Los Angeles
+KJI Plumbing,"THE EMERALD, 2720 W Ave K12, Lancaster, CA",created,THE EMERALD,Lancaster
+Kreit Mechanical,"ALVAERE PARKVIEW,",created,ALVAERE PARKVIEW,
+Kreit Mechanical,"HHH NEW HAMPSHIRE APTS, 711 S New Hampshire Ave, Los Angeles, CA 90005",created,HHH NEW HAMPSHIRE APTS,Los Angeles
+Lovazzano,MONARCH AT REDWOOD,matched,Monarch Apts.,named match (check)
+Mark Harris Plumbing,"CORTEZ HILL APTS, 1449 9th Ave, San Diego, CA 92101",created,CORTEZ HILL APTS,San Diego
+Mark Harris Plumbing,"ENTRADA APTS, 1705-1747 Seventh St, Riverside, CA 92507",created,ENTRADA APTS,Riverside
+Mark Harris Plumbing,"ESTRELLA, 590-602 W Richmar Ave, San Marcos, CA 92069",created,ESTRELLA,San Marcos
+Mark Harris Plumbing,"NESTOR SENIOR VILLAGE, 1120 Nestor Way, San Diego, CA 92154",created,NESTOR SENIOR VILLAGE,San Diego
+Mark Harris Plumbing,"SANTA FE SENIOR VILLAGE, 414 & 428 N Santa Fe Ave, Vista, CA 92083",created,SANTA FE SENIOR VILLAGE,Vista
+Mark Harris Plumbing,"VISTA DE LA SIERRA APT, 11253 Pierce St, Riverside, CA 92505",created,VISTA DE LA SIERRA APT,Riverside
+MG Plumbing,"FOUNTAIN STREET APARTMENTS, 4151 E Fountain St & 4220 E Wehrle Ct, Long Beach , CA",matched,FOUNTAIN VALLEY APARTMENTS,named match (check)
+Murray Co,"RUHS Wellness Village, 23815 Placentia St, Perris, CA 92570",created,RUHS Wellness Village,Perris
+Ocean Park Mechanical,"COURTHOUSE COMMONS RESIDENTIAL TOWER, 220 West Broadway, San Diego, CA 92101",created,COURTHOUSE COMMONS RESIDENTIAL TOWER,San Diego
+Ocean Park Mechanical,"KINDRED,  1555 Sixth Ave, San Diego, CA 92101",matched,KINDRED APTS.,same customer · 74%
+Original Sid Blackman Plumbing,"IMPERIAL SENIOR APT, 307 & 321 North Imperial Ave, Imperial, CA 92251",created,IMPERIAL SENIOR APT,Imperial
+Pace Supply,"69th Street Apartments, 6661 Folsom Blvd, Sacramento, CA 95819",matched,69th Street Apts.,same customer · 100%
+Pace Supply,CSUS STUDENT HOUSING III,matched,CSUS Student Housing,same customer · 91%
+Pace Supply,"LINDEN APTS, 427 Linden Ave, South San Francisco, CA",created,LINDEN APTS,South San Francisco
+Pace Supply,"MONTEREY CROSSING SENIOR APTS,  1480 Monterey St, San Luis Obispo, CA 93401",created,MONTEREY CROSSING SENIOR APTS,San Luis Obispo
+Pace Supply,"TIERRASANTA VILLAS APTS, B Street/Prusso St, Livingston, CA 95334",created,TIERRASANTA VILLAS APTS,Livingston
+Plumbing Concepts,"MAIN STREET APARTMENTS, 4507 S Main St, Los Angeles, CA 90037",created,MAIN STREET APARTMENTS,Los Angeles
+Plumbing Concepts,"PASEO ADELANTO, 32400 Paseo Adelanto, San Juan Capistrano, CA 92675",created,PASEO ADELANTO,San Juan Capistrano
+Plumbing Solutions,"WESTVIEW, 247 West Warner St, Ventura, CA",created,WESTVIEW,Ventura
+ProCraft,"SB COUNTY DBH COMPREHENSIVE TREATMENT CAMPUS, 13333 Palmdale Rd, Victorville, CA 92395",created,SB COUNTY DBH COMPREHENSIVE TREATMENT CAMPUS,Victorville
+Pure Water Plumbing,"VALENTINE RD APTS, 5818 Valentine Rd, Ventura, CA 93003",created,VALENTINE RD APTS,Ventura
+Pure Water Plumbing,"VILLAGE SENIOR APTS, 332 & 334 Valley Vineyard Circle, Buellton, CA 93427",created,VILLAGE SENIOR APTS,Buellton
+Quality Development & Const,"SANTA ANA-NORTH HARBOR VILLAGE, 1108 N Harbor Village, Santa Ana, CA 90703",created,SANTA ANA-NORTH HARBOR VILLAGE,Santa Ana
+Reece,"SANTA FE SPRINGS INTERIM HOUSING, 10951 Laurel Ave, Santa Fe Springs, CA 90670",created,SANTA FE SPRINGS INTERIM HOUSING,Santa Fe Springs
+Sherwood Mechanical,"HARRINGTON HEIGHTS, 1320 Broadway, San Diego, CA 92101",created,HARRINGTON HEIGHTS,San Diego
+Sherwood Mechanical,"NORTH CITY BLOCK F PHASE A, San Marcos",matched,North City PREV. WAGE/TURNKEY,named match (check)
+Sherwood Mechanical,"WAKELAND, 1150 Fashion Valley Rd, San Diego, CA 92108 (kt sales will do work)",matched,Wakeland Riverwalk,same customer · 62%
+Sierra Commercial Plumbing,"WESTVIEW VILLAGE III, 302 W Flint St, Ventura, CA 93001",created,WESTVIEW VILLAGE III,Ventura
+Springwater Plumbing,"MANCHESTER APTS, 823 W Manchester Ave, Los Angeles, CA 90044",created,MANCHESTER APTS,Los Angeles
+Springwater Plumbing,"ROSA'S PLACE, 448 S San Pedro St, Los Angeles, CA",matched,ROSAS PLACE,same customer · 96%
+Springwater Plumbing,"TOYON GARDENS, 3127 W 147th St, Gardena, CA 90249",created,TOYON GARDENS,Gardena
+SSW Mechanical,"ALOE PALM CANYON, PALM SPRINGS",created,ALOE PALM CANYON,Palm Springs
+SSW Mechanical,"DANNY'S HOME FOR HEROES, 4856 West Avenue L-14, Quartz Hill, CA 93536",created,DANNY'S HOME FOR HEROES,Quartz Hill
+SSW Mechanical,"FORT IRWIN APARTMENTS, Pork Chop Hill & 5th St, Fort Irwin, CA 92310",matched,"Tiefort View PRE. WAGE/TURNKEY Fort Irwin, CA",named match (check)
+SSW Mechanical,"IMAGINE VILLAGE II, 43445 Sahuayo St, Lancaster, CA 93535",created,IMAGINE VILLAGE II,Lancaster
+SSW Mechanical,"JFM SENIOR VILLAS APARTMENTS, 45-135 Van Buren St, Indio, CA 92201",matched,JFM VILLAS SR. APTS.,named match (check)
+SSW Mechanical,"KIMBALL HIGHLAND WEST 1221 D St. National City, CA 91950",created,KIMBALL HIGHLAND WEST,National City
+SSW Mechanical,"PALM VILLAS AT MILLENIUM, 74699 Technology Dr, Palm Desert, CA 92211",matched,Palm Villas @ Millenium,same customer · 93%
+SSW Mechanical,"SERENADE 43RD ST, 4034 43rd St, San Diego",created,SERENADE 43RD ST,San Diego
+SSW Mechanical,"TRES LAGOS PHASE II,  23367 Catt Rd, Wildomar, CA 92595",created,TRES LAGOS PHASE II,Wildomar
+SSW Mechanical,"VISTA SUNRISE II, 1527 N Sunrise Way, Palm Springs, CA 92262",created,VISTA SUNRISE II,Palm Springs
+Union Plumbing,"RILEY APARTMENTS, 200 Riley St & West Heald Ave, Lake Elsinore, CA",created,RILEY APARTMENTS,Lake Elsinore
+Vazgen Plumbing,"THE VERMONT - HOMEKEY, 18602 South Vermont Ave, Los Angeles - NOT A PREVAILING WAGE JOB - DELIVERY ONLY 9-29-25",skipped,,list says NOT a prevailing wage job
+Winsupply,"1400 BRISTOL KNIGHTS INN, PALMDALE (MAY ALSO BE KNOWN AS ANTELOPE VISTA)",created,1400 BRISTOL KNIGHTS INN,Palmdale
