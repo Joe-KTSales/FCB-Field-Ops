@@ -22,7 +22,7 @@ interface Sheet {
 }
 interface Scan {
   id: string; status: string; created_at: string; error: string | null; confidence: number | null; work_order_id: string | null;
-  extracted: { sheets: Sheet[] } | null;
+  extracted: { sheets: Sheet[]; manual?: boolean } | null;
   file: { id: string; file_name: string; storage_path: string; mime_type: string | null };
 }
 
@@ -47,10 +47,20 @@ function SheetReview({ scan, idx, sheet, onDone }: { scan: Scan; idx: number; sh
   const qc = useQueryClient();
   const firstWo = sheet.work_order_candidates?.[0];
   const [woId, setWoId] = useState<string>(firstWo?.id ?? '');
+  const [pickedDate, setPickedDate] = useState(sheet.date ?? todayIso());
+  // every work order scheduled on the sheet's date, so a hand-entered sheet can attach to the right one
+  const dayWos = useQuery({
+    queryKey: ['intake-day-wos', pickedDate],
+    queryFn: async () =>
+      must(await supabase.from('v_work_order_overview').select('id, number, type_code, status, job, customer, crew_name').eq('scheduled_date', pickedDate).order('crew_name')) as {
+        id: string; number: string; type_code: string; status: string; job: string; customer: string; crew_name: string | null;
+      }[],
+  });
+  const manualNames = !(sheet.name_matches && sheet.name_matches.length);
   const [newJob, setNewJob] = useState<PickedJob | null>(
     sheet.job_candidates?.[0] ? { id: sheet.job_candidates[0].job_id, name: sheet.job_candidates[0].job_name, customer: sheet.job_candidates[0].customer_name, city: sheet.job_candidates[0].city } : null,
   );
-  const [date, setDate] = useState(sheet.date ?? todayIso());
+  const date = pickedDate;
   const [type, setType] = useState(TYPE_FROM_FORM[sheet.form_type ?? ''] ?? 'IN');
   const [canceled, setCanceled] = useState(!(sheet.lines?.length) && (sheet.flags ?? []).includes('not_ready'));
   const [workers, setWorkers] = useState(
@@ -59,6 +69,23 @@ function SheetReview({ scan, idx, sheet, onDone }: { scan: Scan; idx: number; sh
     })),
   );
   const [lines, setLines] = useState<SheetLine[]>(sheet.lines ?? []);
+  useEffect(() => {
+    if (!manualNames || !woId) return;
+    let live = true;
+    (async () => {
+      const { data } = await supabase
+        .from('crew_day_stops')
+        .select('crew_day:crew_days(members:crew_day_members(position, status, employee:employees(id, display_name)))')
+        .eq('work_order_id', woId);
+      const members = ((data ?? []) as unknown as { crew_day: { members: { position: string; status: string; employee: { id: string; display_name: string } }[] } }[])
+        .flatMap((r) => r.crew_day?.members ?? [])
+        .filter((m) => m.status !== 'called_out' && m.status !== 'no_show');
+      if (live && members.length) {
+        setWorkers(members.map((m) => ({ raw: m.employee.display_name, position: m.position, employee_id: m.employee.id, candidates: [] })));
+      }
+    })();
+    return () => { live = false; };
+  }, [woId, manualNames]);
   const [flags, setFlags] = useState<string[]>(sheet.flags ?? []);
   const [timeIn, setTimeIn] = useState(sheet.time_in ?? '');
   const [timeOut, setTimeOut] = useState(sheet.time_out ?? '');
@@ -83,7 +110,7 @@ function SheetReview({ scan, idx, sheet, onDone }: { scan: Scan; idx: number; sh
     setBusy(true);
     try {
       let targetId = woId;
-      let targetNumber = sheet.work_order_candidates?.find((w) => w.id === woId)?.number ?? '';
+      let targetNumber = sheet.work_order_candidates?.find((w) => w.id === woId)?.number ?? dayWos.data?.find((w) => w.id === woId)?.number ?? '';
       if (!targetId) {
         if (!newJob) throw new Error('Pick the job this sheet belongs to.');
         const created = must(
@@ -103,12 +130,14 @@ function SheetReview({ scan, idx, sheet, onDone }: { scan: Scan; idx: number; sh
         }).eq('id', targetId),
       );
       // the sheet is the record of who was there — replace roster-derived names
-      must(await supabase.from('work_order_workers').delete().eq('work_order_id', targetId));
       const wrows = workers.filter((w) => w.raw || w.employee_id).map((w) => ({
         work_order_id: targetId, employee_id: w.employee_id || null, raw_name: w.raw, position: w.position, source: 'scan',
         match_confidence: w.employee_id ? 1 : null,
       }));
-      if (wrows.length) must(await supabase.from('work_order_workers').insert(wrows));
+      if (wrows.length) {
+        must(await supabase.from('work_order_workers').delete().eq('work_order_id', targetId));
+        must(await supabase.from('work_order_workers').insert(wrows));
+      }
       // teach the alias list
       const aliasRows = workers
         .filter((w) => w.employee_id && w.raw && !emps.data?.some((e) => e.id === w.employee_id && e.display_name.toLowerCase() === w.raw.toLowerCase()))
@@ -158,16 +187,27 @@ function SheetReview({ scan, idx, sheet, onDone }: { scan: Scan; idx: number; sh
           {sheet.prevailing_wage_marked && <span className="rounded bg-violet-100 px-1.5 text-xs font-bold text-violet-800">“PW” written on sheet</span>}
           {typeof sheet.confidence === 'number' && <span className={cx('ml-auto text-xs font-semibold', sheet.confidence < 0.7 ? 'text-amber-800' : 'text-slate-500')}>read confidence {Math.round(sheet.confidence * 100)}%</span>}
         </div>
-        <Field label="Which work order is this?">
-          <select className={inputCls} value={woId} onChange={(e) => setWoId(e.target.value)}>
-            {(sheet.work_order_candidates ?? []).map((w) => <option key={w.id} value={w.id}>{w.number} · scheduled that day</option>)}
-            <option value="">Create a new work order from this sheet…</option>
-          </select>
-        </Field>
+        <div className="grid gap-3 sm:grid-cols-[auto_1fr]">
+          <Field label="Date on the sheet"><input type="date" className={inputCls} value={pickedDate} onChange={(e) => { setPickedDate(e.target.value); setWoId(''); }} /></Field>
+          <Field label="Which work order is this?" hint={dayWos.data && !dayWos.data.length ? 'Nothing was scheduled that day — create one from this sheet' : undefined}>
+            <select className={inputCls} value={woId} onChange={(e) => setWoId(e.target.value)}>
+              <option value="">Create a new work order from this sheet…</option>
+              {(sheet.work_order_candidates ?? []).length > 0 && (
+                <optgroup label="Suggested from the sheet">
+                  {(sheet.work_order_candidates ?? []).map((w) => <option key={'c' + w.id} value={w.id}>{w.number}</option>)}
+                </optgroup>
+              )}
+              <optgroup label={`Scheduled ${pickedDate}`}>
+                {(dayWos.data ?? []).map((w) => (
+                  <option key={w.id} value={w.id}>{w.number} · {w.job} · {w.crew_name ?? 'no crew'}{w.status === 'complete' ? ' · already done' : ''}</option>
+                ))}
+              </optgroup>
+            </select>
+          </Field>
+        </div>
         {!woId && (
-          <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto]">
+          <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
             <Field label="Job"><JobPicker value={newJob} onChange={setNewJob} /></Field>
-            <Field label="Date"><input type="date" className={inputCls} value={date} onChange={(e) => setDate(e.target.value)} /></Field>
             <Field label="Type">
               <select className={inputCls} value={type} onChange={(e) => setType(e.target.value)}><option value="IN">Install</option><option value="ST">Stocking</option><option value="FN">Finals</option></select>
             </Field>
@@ -178,6 +218,7 @@ function SheetReview({ scan, idx, sheet, onDone }: { scan: Scan; idx: number; sh
 
       <Card className="flex flex-col gap-2 p-4">
         <h3 className="text-[15px] font-bold">Who worked <span className="text-[13px] font-normal text-slate-600">· feeds the PW report</span></h3>
+        {manualNames && <p className="text-[13px] text-slate-600">Filled from that day’s crew — change it to match the names on the sheet.</p>}
         {workers.map((w, i) => (
           <div key={i} className="flex flex-wrap items-center gap-2 border-b border-slate-100 py-1.5 text-sm">
             <span className="w-28 font-mono text-[13px] text-slate-600">“{w.raw}”</span>
@@ -336,7 +377,7 @@ export default function Intake() {
               <span className="truncate text-sm font-bold">{s.file.file_name}</span>
               <span className="text-xs text-slate-600">{stamp(s.created_at)}</span>
               <span className={cx('text-xs font-semibold', s.status === 'failed' ? 'text-red-700' : s.status === 'confirmed' ? 'text-green-800' : 'text-amber-800')}>
-                {s.status === 'processing' || s.status === 'uploaded' ? 'Reading…' : s.status === 'failed' ? 'Couldn’t read — open to retry or enter by hand' : s.status === 'confirmed' ? 'Confirmed' : `${done} of ${n} sheets confirmed`}
+                {s.status === 'processing' || s.status === 'uploaded' ? 'Reading…' : s.status === 'failed' ? 'Couldn’t read — open to retry or enter by hand' : s.status === 'confirmed' ? 'Confirmed' : s.extracted?.manual && !done ? 'Ready to enter by hand' : `${done} of ${n} sheets confirmed`}
               </span>
             </button>
           );
@@ -361,6 +402,12 @@ export default function Intake() {
                   <Button onClick={() => run.mutate(async () => must(await supabase.from('work_order_scans').update({ status: 'needs_review', extracted: { sheets: [{ page: 1, lines: [], helpers: [] }] } }).eq('id', sel.id)))}>Enter by hand</Button>
                 </div>
               </Card>
+            )}
+            {sel.extracted?.manual && sel.status === 'needs_review' && (
+              <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-950">
+                Automatic reading isn’t turned on yet, so fill this in from the sheet on the left. Pick the work order, check who worked, add the lines and notes, then confirm.
+                {' '}<button className="font-semibold underline" onClick={() => read.mutate(sel.id)}>Try automatic reading</button>
+              </div>
             )}
             {sheets.length > 0 && sel.status !== 'processing' && (
               <>

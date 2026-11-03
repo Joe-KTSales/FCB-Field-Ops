@@ -79,9 +79,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(status).json({ error: message });
   };
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return fail(501, 'Automatic reading is not set up yet (ANTHROPIC_API_KEY missing). Enter the sheet by hand for now.');
-  }
 
   const { data: scan, error } = await sb
     .from('work_order_scans')
@@ -90,6 +87,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     .single();
   if (error || !scan) return res.status(404).json({ error: error?.message || 'Scan not found' });
   const file = (scan as unknown as { file: { storage_path: string; mime_type: string | null; bucket: string | null } }).file;
+
+  if (!process.env.ANTHROPIC_API_KEY) {
+    // No AI key yet: go straight to hand entry (one blank sheet per PDF page) instead of reporting a failure.
+    let pages = 1;
+    if ((file.mime_type || '').includes('pdf') || file.storage_path.endsWith('.pdf')) {
+      const dl = await sb.storage.from(file.bucket || 'job-files').download(file.storage_path);
+      if (dl.data) {
+        const raw = Buffer.from(await dl.data.arrayBuffer()).toString('latin1');
+        pages = Math.min(60, Math.max(1, (raw.match(/\/Type\s*\/Page(?![s\w])/g) || []).length));
+      }
+    }
+    const sheets = Array.from({ length: pages }, (_, i) => ({ page: i + 1, lines: [], helpers: [] }));
+    await sb.from('work_order_scans').update({ status: 'needs_review', extracted: { manual: true, sheets }, error: null }).eq('id', scanId);
+    return res.status(200).json({ ok: true, manual: true, sheets: pages });
+  }
 
   await sb.from('work_order_scans').update({ status: 'processing', error: null }).eq('id', scanId);
 
