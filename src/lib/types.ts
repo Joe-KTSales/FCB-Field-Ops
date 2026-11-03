@@ -77,6 +77,7 @@ export interface Employee {
   employee_code: string | null;
   default_position: CrewPosition;
   departments: string[];
+  employer: 'kt' | 'fcb';
   active: boolean;
 }
 

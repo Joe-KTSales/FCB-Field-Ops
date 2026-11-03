@@ -441,6 +441,7 @@ job_by_key = {}
 for (c, k), j in jobs.items():
     job_by_key.setdefault(k, j)
 new_companies, new_jobs, parties, periods, updates, review_pw, new_job_aliases, new_company_aliases = {}, {}, [], [], [], [], [], []
+pw_to_confirm = []   # (period id, note) for matches a person should confirm
 for cust_raw, job_raw in pw_rows:
     cust_raw, job_raw = str(cust_raw).strip(), str(job_raw).strip()
     name, address, city, note = parse_pw(job_raw)
@@ -484,6 +485,8 @@ for cust_raw, job_raw in pw_rows:
         if norm(name) != norm(match["name"]):
             new_job_aliases.append([q(jid), q(name), q("pw_list")])
         review_pw.append([cust_raw, job_raw, "matched", match["name"], how])
+        if not how.endswith("100%"):
+            pw_to_confirm.append((uid("pw", jid), f"PW list says “{cust_raw} – {job_raw}” · matched to “{match['name']}” ({company_name.get(match['customer_id'], '')}) · {how}"))
     else:
         jid = uid("job", "pw", cust_id, jk)
         new_jobs[jid] = (name, cust_id, address, city, note)
@@ -499,7 +502,13 @@ p4 = [
     "\n".join(updates),
     inserts("job_parties", ["job_id", "company_id", "role", "note"], parties),
     inserts("prevailing_wage_periods", ["id", "job_id", "effective_from", "source_note"], periods),
+    # matches a person should confirm (columns arrive with migration 0009; skipped quietly if it isn't run yet)
+    "do $$ begin\n  if exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'prevailing_wage_periods' and column_name = 'needs_review') then\n"
+    + "\n".join(f"    update public.prevailing_wage_periods set needs_review = true, match_note = {q(n)} where id = {q(i)} and reviewed_at is null;" for i, n in pw_to_confirm)
+    + "\n  end if;\nend $$;",
 ]
+open(os.path.join(out_dir, "_pw_to_confirm.sql"), "w").write("\n".join(
+    f"update public.prevailing_wage_periods set needs_review = true, match_note = {q(n)} where id = {q(i)} and reviewed_at is null;" for i, n in pw_to_confirm) + "\n")
 sizes["04_prevailing_wage.sql"] = write("04_prevailing_wage.sql", p4, "4 of 5 · Prevailing wage jobs (matched to existing jobs or created) and PW flags")
 with open(os.path.join(out_dir, "pw_import_review.csv"), "w", newline="") as f:
     w = csv.writer(f)

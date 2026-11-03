@@ -9,7 +9,7 @@ import JobPicker, { type PickedJob } from '@/components/JobPicker';
 import { Button, Card, ErrorBox, Field, Spinner, inputCls } from '@/components/ui';
 
 interface Row { customer: string; job: string; job_id: string; work_date: string; employee: string; employee_code: string | null; employee_id: string | null; work_order_number: string; unmatched: boolean }
-interface Period { id: string; effective_from: string; effective_to: string | null; source_note: string | null; job: { id: string; name: string; city: string | null; customer: { name: string } } }
+interface Period { id: string; effective_from: string; effective_to: string | null; source_note: string | null; needs_review: boolean; match_note: string | null; job: { id: string; name: string; city: string | null; customer: { name: string } } }
 
 function groupRows(rows: Row[]) {
   const m = new Map<string, { title: string; rows: Row[] }>();
@@ -86,7 +86,7 @@ export default function PWReport() {
   const periods = useQuery({
     queryKey: ['pw-periods'],
     queryFn: async () =>
-      must(await supabase.from('prevailing_wage_periods').select('id, effective_from, effective_to, source_note, job:jobs(id, name, city, customer:companies(name))').order('effective_from', { ascending: false })) as unknown as Period[],
+      must(await supabase.from('prevailing_wage_periods').select('id, effective_from, effective_to, source_note, needs_review, match_note, job:jobs(id, name, city, customer:companies(name))').order('effective_from', { ascending: false })) as unknown as Period[],
   });
   const history = useQuery({
     queryKey: ['pw-history'],
@@ -100,6 +100,9 @@ export default function PWReport() {
   });
 
   const groups = useMemo(() => groupRows(rows.data ?? []), [rows.data]);
+  const toConfirm = (periods.data ?? []).filter((p) => p.needs_review);
+  const [listFilter, setListFilter] = useState('');
+  const { session } = useAuth();
   const unmatched = (rows.data ?? []).filter((r) => r.unmatched);
   const people = new Set((rows.data ?? []).map((r) => r.employee)).size;
 
@@ -147,10 +150,29 @@ export default function PWReport() {
         </div>
         <ErrorBox error={rows.error || run.error} />
 
+        {toConfirm.length > 0 && (
+          <Card className="flex flex-col gap-3 border-amber-300 p-4">
+            <h2 className="text-base font-bold">Matches to confirm · {toConfirm.length}</h2>
+            <p className="text-[13px] text-slate-600">These PW list lines were linked to an existing job by a similar name. Confirm each one, or unlink it and add the right job below.</p>
+            {toConfirm.map((p) => (
+              <div key={p.id} className="flex flex-col gap-2 rounded-lg bg-amber-50 p-3 text-sm">
+                <div><Link to={`/jobs/${p.job.id}`} className="font-semibold text-slate-900">{p.job.name}</Link> <span className="text-slate-600">· {p.job.customer.name}{p.job.city ? ` · ${p.job.city}` : ''}</span></div>
+                {p.match_note && <div className="text-[13px] text-slate-700">{p.match_note}</div>}
+                <div className="flex gap-2">
+                  <Button size="sm" variant="success" onClick={() => run.mutate(async () => must(await supabase.from('prevailing_wage_periods').update({ needs_review: false, reviewed_at: new Date().toISOString(), reviewed_by: session?.user.id }).eq('id', p.id)))}>Correct</Button>
+                  <Button size="sm" variant="danger" onClick={() => { if (confirm(`Unlink "${p.job.name}" from the PW list? It will no longer count as prevailing wage.`)) run.mutate(async () => must(await supabase.from('prevailing_wage_periods').delete().eq('id', p.id))); }}>Wrong job — unlink</Button>
+                </div>
+              </div>
+            ))}
+          </Card>
+        )}
+
         <Card className="flex flex-col gap-3 p-4">
-          <h2 className="text-base font-bold">PW job list</h2>
-          {(periods.data ?? []).map((p) => (
+          <h2 className="text-base font-bold">PW job list · {(periods.data ?? []).filter((p) => !p.effective_to).length} active</h2>
+          <input aria-label="Filter PW jobs" className={inputCls} placeholder="Filter by job or customer…" value={listFilter} onChange={(e) => setListFilter(e.target.value)} />
+          {(periods.data ?? []).filter((p) => !listFilter || `${p.job.name} ${p.job.customer.name} ${p.job.city ?? ''}`.toLowerCase().includes(listFilter.toLowerCase())).map((p) => (
             <div key={p.id} className="flex items-center gap-2 border-b border-slate-100 pb-2 text-sm">
+              {p.needs_review && <span title="Match not confirmed yet" className="rounded bg-amber-100 px-1 text-[11px] font-bold text-amber-800">?</span>}
               <div className="flex-1">
                 <Link to={`/jobs/${p.job.id}`} className="font-semibold text-slate-900">{p.job.name}</Link>
                 <div className="text-xs text-slate-600">{p.job.customer.name} · from {shortDate(p.effective_from)}{p.effective_to ? ` to ${shortDate(p.effective_to)}` : ''}{p.source_note ? ` · ${p.source_note}` : ''}</div>

@@ -15,7 +15,7 @@ function EmployeeModal({ id, onClose }: { id: string | 'new'; onClose: () => voi
   const e = id === 'new' ? null : emps.data?.find((x) => x.id === id);
   const [f, setF] = useState({
     first_name: e?.first_name ?? '', last_name: e?.last_name ?? '', employee_code: e?.employee_code ?? '',
-    default_position: e?.default_position ?? 'helper', departments: e?.departments ?? [], active: e?.active ?? true,
+    default_position: e?.default_position ?? 'helper', departments: e?.departments ?? [], active: e?.active ?? true, employer: e?.employer ?? 'kt',
   });
   const [alias, setAlias] = useState('');
   const aliases = useQuery({
@@ -48,6 +48,11 @@ function EmployeeModal({ id, onClose }: { id: string | 'new'; onClose: () => voi
           <Field label="First name"><input className={inputCls} value={f.first_name} onChange={(x) => setF({ ...f, first_name: x.target.value })} /></Field>
           <Field label="Last name"><input className={inputCls} value={f.last_name} onChange={(x) => setF({ ...f, last_name: x.target.value })} /></Field>
           <Field label="Payroll ID" hint="Paycom / UKG employee ID"><input className={inputCls} value={f.employee_code} onChange={(x) => setF({ ...f, employee_code: x.target.value })} /></Field>
+          <Field label="Employer">
+            <select className={inputCls} value={f.employer} onChange={(x) => setF({ ...f, employer: x.target.value as 'kt' | 'fcb' })}>
+              <option value="kt">KT Sales and Service</option><option value="fcb">Fiber Care Baths</option>
+            </select>
+          </Field>
           <Field label="Usually">
             <select className={inputCls} value={f.default_position} onChange={(x) => setF({ ...f, default_position: x.target.value as typeof f.default_position })}>
               <option value="lead">Lead tech</option><option value="helper">Helper</option><option value="driver">Driver</option><option value="other">Other</option>
@@ -206,14 +211,14 @@ export default function Crews() {
           </div>
           <Card className="overflow-x-auto">
             <table className="w-full min-w-[600px] text-left text-sm">
-              <thead className="border-b border-slate-300 bg-slate-50 text-xs tracking-wider text-slate-600 uppercase"><tr><th className="px-3 py-2.5">Name</th><th className="px-3">Payroll ID</th><th className="px-3">Usually</th><th className="px-3">Departments</th><th className="px-3">Usual crew</th><th className="px-3" /></tr></thead>
+              <thead className="border-b border-slate-300 bg-slate-50 text-xs tracking-wider text-slate-600 uppercase"><tr><th className="px-3 py-2.5">Name</th><th className="px-3">Employer</th><th className="px-3">Payroll ID</th><th className="px-3">Usually</th><th className="px-3">Departments</th><th className="px-3">Usual crew</th><th className="px-3" /></tr></thead>
               <tbody>
                 {(emps.data ?? []).filter((e) => (!filter || e.display_name.toLowerCase().includes(filter.toLowerCase())) && (deptFilter === 'all' || e.departments.includes(deptFilter))).map((e) => {
                   const crew = crews.data?.find((c) => members.data?.some((m) => m.crew_id === c.id && m.employee_id === e.id));
                   return (
                     <tr key={e.id} className={cx('border-b border-slate-100', !e.active && 'text-slate-400')}>
                       <td className="px-3 py-2.5 font-semibold">{e.display_name}{!e.active && ' (inactive)'}</td>
-                      <td className="px-3 font-mono text-[13px]">{e.employee_code}</td>
+                      <td className="px-3">{e.employer === 'fcb' ? 'FCB' : 'KT'}</td><td className="px-3 font-mono text-[13px]">{e.employee_code}</td>
                       <td className="px-3 capitalize">{e.default_position}</td>
                       <td className="px-3">{e.departments.map(deptName).join(', ')}</td>
                       <td className="px-3">{crew?.name}</td>
