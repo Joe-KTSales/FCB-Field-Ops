@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --color-navy: #0B2545;
+  --color-navy-2: #163A66;
+  --color-navy-text: #C7D6EC;
+  --color-brand: #2563EB;
+  --color-brand-dark: #1D4ED8;
+  --color-ground: #EEF1F4;
+}
+
+body { background: var(--color-ground); color: #0F172A; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .55; }

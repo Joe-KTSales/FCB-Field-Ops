@@ -1,0 +1,2426 @@
+[
+ {
+  "file": "install",
+  "page": 1,
+  "form_type": "schedule",
+  "date": "2026-10-29",
+  "title": "KT INSTALLATION SCHEDULE",
+  "crews": [
+   {
+    "lead": "GILBERTO ARELLANO",
+    "helpers": [
+     "FERNANDO GARCIA"
+    ],
+    "stops": [
+     {
+      "customer": "CENTURY WEST",
+      "job": "DEL AMO",
+      "city": "TORRANCE",
+      "work": "install",
+      "notes": ""
+     }
+    ]
+   },
+   {
+    "lead": "JOSE FLORES",
+    "helpers": [
+     "ANEL BAUTISTA"
+    ],
+    "stops": [
+     {
+      "customer": "ALPA CONSTRUCTION",
+      "job": "WOODMAN",
+      "city": "ENCINO",
+      "work": "install",
+      "notes": "WO page 4 says city Van Nuys"
+     }
+    ]
+   },
+   {
+    "lead": "JAVIER JIMENEZ",
+    "helpers": [
+     "JOSE ARMENTA"
+    ],
+    "stops": [
+     {
+      "customer": "CENTURY WEST PLUMBING",
+      "job": "6728 SEPULVEDA BLVD",
+      "city": "VAN NUYS",
+      "work": "install",
+      "notes": ""
+     }
+    ]
+   },
+   {
+    "lead": "NARCISO FLORES",
+    "helpers": [],
+    "stops": [
+     {
+      "customer": "WESTERN NATIONAL",
+      "job": "DISCOVERY PARK BLDG 1",
+      "city": "IRVINE",
+      "work": "install",
+      "notes": "solo crew"
+     }
+    ]
+   }
+  ],
+  "all_names_as_written": [
+   "GILBERTO ARELLANO",
+   "FERNANDO GARCIA",
+   "JOSE FLORES",
+   "ANEL BAUTISTA",
+   "JAVIER JIMENEZ",
+   "JOSE ARMENTA",
+   "NARCISO FLORES"
+  ],
+  "layout_description": "Printed (typed, condensed caps font) landscape sheet, scanned rotated 90deg. Title 'KT INSTALLATION SCHEDULE'; date written vertically along left edge in a shaded band ('THURSDAY, OCTOBER 29, 2026'). Four crew columns per page; column header = lead name on line 1, helper(s) on line 2 (slash-separated when 2 helpers, e.g. 'OSCAR C / IVAN T'). Below header, a grid of up to ~5 stop blocks per column, each block = 1 blank top row (used for start time, e.g. handwritten '7:00') + 3 shaded rows: CUSTOMER/builder, JOB name (or street address / bldg), CITY. No row labels, no lot counts, no product, no work type on the sheet. Continues on page 2 (no repeated title/date) with 4 more crews, so 8 crews total on 2 pages.",
+  "observations": "Only stop #1 filled for most crews; a few crews get a 2nd stop block. Schedule city can disagree with WO (Encino vs Van Nuys)."
+ },
+ {
+  "file": "install",
+  "page": 2,
+  "form_type": "schedule",
+  "date": "2026-10-29",
+  "crews": [
+   {
+    "lead": "ASCENCION PEREZ",
+    "helpers": [
+     "JUAN GODINEZ"
+    ],
+    "stops": [
+     {
+      "customer": "LENNAR",
+      "job": "ORO",
+      "city": "SAN DIEGO",
+      "work": "install",
+      "notes": ""
+     },
+     {
+      "customer": "SHERWOOD MECHANICAL",
+      "job": "6TH & PALM",
+      "city": "SAN DIEGO",
+      "work": "install",
+      "notes": ""
+     }
+    ]
+   },
+   {
+    "lead": "DANIEL ZAVALA",
+    "helpers": [
+     "OSCAR C",
+     "IVAN T"
+    ],
+    "stops": [
+     {
+      "customer": "LENNAR",
+      "job": "HARVEST",
+      "city": "JURUPA VALLEY",
+      "work": "install",
+      "notes": ""
+     },
+     {
+      "customer": "MONTE VISTA HOMES",
+      "job": "DE ANZA VILLAS",
+      "city": "RIVERSIDE",
+      "work": "install",
+      "notes": ""
+     }
+    ]
+   },
+   {
+    "lead": "ROBERTO MARTINEZ",
+    "helpers": [
+     "JESUS REYES"
+    ],
+    "stops": [
+     {
+      "customer": "LENNAR",
+      "job": "SKYLINE",
+      "city": "JURUPA VALLEY",
+      "work": "install",
+      "notes": "handwritten '7:00' (rotated, reads '7:01'?) in the blank top row = start time"
+     },
+     {
+      "customer": "LENNAR",
+      "job": "OUTBOUND",
+      "city": "RIALTO",
+      "work": "install",
+      "notes": ""
+     }
+    ]
+   },
+   {
+    "lead": "AGUSTIN CONTRERAS",
+    "helpers": [
+     "ANTHONY MORALES"
+    ],
+    "stops": [
+     {
+      "customer": "PRODUCTION PLUS",
+      "job": "BELLAMY",
+      "city": "AGOURA",
+      "work": "install",
+      "notes": ""
+     }
+    ]
+   }
+  ],
+  "all_names_as_written": [
+   "ASCENCION PEREZ",
+   "JUAN GODINEZ",
+   "DANIEL ZAVALA",
+   "OSCAR C",
+   "IVAN T",
+   "ROBERTO MARTINEZ",
+   "JESUS REYES",
+   "AGUSTIN CONTRERAS",
+   "ANTHONY MORALES"
+  ],
+  "layout_description": "Continuation of page 1 schedule: same 4-column grid, no title/date. Header area top shows faint grey boxes (scan artifacts).",
+  "observations": "Crews with 2 stops list them in separate blocks; first block's top blank row used for a handwritten start time."
+ },
+ {
+  "file": "install",
+  "page": 3,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Century west plumbing",
+  "contractor": "KT Sales and Service",
+  "job_name": "Del AMO",
+  "city": "Torrance (written 'Torrance' w/ odd T)",
+  "phase_or_building": "Level 4? Bld 1 (written in LOT field: 'Level 4? Bld 1')",
+  "prevailing_wage": false,
+  "time_in": "8:40? AM",
+  "time_out": "4:00? PM",
+  "lead": "Gilberto",
+  "helpers": [
+   "Fernando"
+  ],
+  "all_names_as_written": [
+   "GilbertoA?",
+   "Fernando"
+  ],
+  "name_guesses": {
+   "GilbertoA?": "Gilberto Arellano",
+   "Fernando": "Fernando Garcia"
+  },
+  "lines": [
+   {
+    "lot": "419?",
+    "product_or_sku": "PR6373",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "417?",
+    "product_or_sku": "PR6373",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "417?",
+    "product_or_sku": "ART6036R",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "410",
+    "product_or_sku": "PR6373",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "412",
+    "product_or_sku": "ART6032?",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "412",
+    "product_or_sku": "ART6036L",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "414",
+    "product_or_sku": "PR6373",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "414",
+    "product_or_sku": "ART6036L?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "134?",
+    "product_or_sku": "ART6036R",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "136",
+    "product_or_sku": "ART6036L?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "140?",
+    "product_or_sku": "ART6036?",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "142",
+    "product_or_sku": "ART6036R",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3 col used as 2nd lot#, SKU in option col"
+   },
+   {
+    "lot": "144",
+    "product_or_sku": "ART6036L",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3/option"
+   },
+   {
+    "lot": "146",
+    "product_or_sku": "ART6036R",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3/option"
+   },
+   {
+    "lot": "148",
+    "product_or_sku": "ART6036L",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3/option"
+   },
+   {
+    "lot": "150",
+    "product_or_sku": "ART6036R",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3/option"
+   },
+   {
+    "lot": "152",
+    "product_or_sku": "ART6036L?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3/option"
+   }
+  ],
+  "totals_written": "Installed tubs 17 (line count matches 17)",
+  "notes_original": "Unidades 412 la ART6036L y 146 la ART6036R nesesitan reparacion ASAP te mande fotos se instalaron",
+  "notes_english": "Units 412 (the ART6036L) and 146 (the ART6036R) need repair ASAP; I sent you photos; they were installed.",
+  "flags": [
+   "repair_needed",
+   "no_signature",
+   "photos_sent_offline"
+  ],
+  "superintendent_signed": false,
+  "observations": "Job # field '1' = stop sequence. Crew repurposed BATH#3 column as a second LOT# column and OPTION as its SKU. Repair evidence sent via separate photos (text/WhatsApp), not attached to form. Header DATE/CONTACT blank; date only in schedule-date line."
+ },
+ {
+  "file": "install",
+  "page": 4,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "AlPa Construction",
+  "contractor": "KT Sales and Service",
+  "job_name": "Woodman",
+  "city": "Van Nuys",
+  "phase_or_building": "Level 6",
+  "prevailing_wage": false,
+  "time_in": "8:35",
+  "time_out": "1:30",
+  "lead": "Jose",
+  "helpers": [
+   "Anel"
+  ],
+  "all_names_as_written": [
+   "Jose",
+   "Anel"
+  ],
+  "name_guesses": {
+   "Jose": "Jose Flores",
+   "Anel": "Anel Bautista"
+  },
+  "lines": [
+   {
+    "lot": "611",
+    "product_or_sku": "ET6032",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "612",
+    "product_or_sku": "ET6032",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "613",
+    "product_or_sku": "ET6032",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "614",
+    "product_or_sku": "ET6032",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "615",
+    "product_or_sku": "ET6032",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "616",
+    "product_or_sku": "ET6032",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "617",
+    "product_or_sku": "ET6032",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "616?",
+    "product_or_sku": "ET6032",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master (lot # repeated as written, maybe 618/620?)"
+   },
+   {
+    "lot": "618",
+    "product_or_sku": "ET6032",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "option/other"
+   },
+   {
+    "lot": "619",
+    "product_or_sku": "ET6032",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "option/other"
+   }
+  ],
+  "totals_written": "(totals area obscured by wood-grain/clipboard artifact in scan)",
+  "notes_original": "Se termino lo que estaba listo.",
+  "notes_english": "We finished what was ready.",
+  "flags": [
+   "partial",
+   "no_signature",
+   "duplicate_lot_number?"
+  ],
+  "superintendent_signed": false,
+  "observations": "Note written in WORK COMPLETED area, not SPECIAL NOTES. Hand written as separate letter after SKU (ET6032 R). HESS-branded form variant. Schedule said Encino, WO says Van Nuys."
+ },
+ {
+  "file": "install",
+  "page": 5,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Century West Plumbing",
+  "contractor": "KT Sales and Service",
+  "job_name": "6728 Sepulveda Blvd",
+  "city": "Van Nuys",
+  "phase_or_building": "Levels 3, 4, 5 ('Leve 3,4,5' in LOTS)",
+  "prevailing_wage": false,
+  "time_in": "8:13 AM",
+  "time_out": "1:30 PM",
+  "lead": "Javier?",
+  "helpers": [
+   "Jose"
+  ],
+  "all_names_as_written": [
+   "Javir?",
+   "José",
+   "ALFONSO"
+  ],
+  "name_guesses": {
+   "Javir?": "Javier Jimenez",
+   "José": "Jose Armenta",
+   "ALFONSO": "Alfonso (site contact/super, not KT)"
+  },
+  "lines": [
+   {
+    "lot": "308",
+    "product_or_sku": "ET6032R? (written RT6032R)",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 3"
+   },
+   {
+    "lot": "428",
+    "product_or_sku": "ET6032R?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 4"
+   },
+   {
+    "lot": "491? (likely 431?)",
+    "product_or_sku": "ET6032L?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 4"
+   },
+   {
+    "lot": "523",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "528",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "529",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "529",
+    "product_or_sku": "ET6032?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "530",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "531",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "532",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "533",
+    "product_or_sku": "ET6032?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "534",
+    "product_or_sku": "ET6032?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "534",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "535",
+    "product_or_sku": "ET6032?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "536",
+    "product_or_sku": "ET6032?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "536",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "538",
+    "product_or_sku": "ET6032?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "541",
+    "product_or_sku": "ET6032?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "541",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "542",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "543",
+    "product_or_sku": "ET6032?",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "544",
+    "product_or_sku": "ET6032?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   },
+   {
+    "lot": "546",
+    "product_or_sku": "ET6032?",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "Floor 5"
+   }
+  ],
+  "totals_written": "Installed 23 (line count matches 23)",
+  "notes_original": "(arrows/headers drawn over columns: 'Foor 3', 'Foor 4', 'Foor 5')",
+  "notes_english": "Floor 3 / Floor 4 / Floor 5 column groupings",
+  "flags": [],
+  "superintendent_signed": true,
+  "observations": "Phone number 805-857-1100 written in CONTACT field and name ALFONSO in PHONE field (fields swapped). Crew ignored column headers and hand-drew floor headings with arrows; MISSING and DONE columns reused for lots. Check-in-with signature present. SKU prefix ambiguous ET vs RT."
+ },
+ {
+  "file": "install",
+  "page": 6,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Western National",
+  "contractor": "KT Sales and Service",
+  "job_name": "Discovery",
+  "city": "Irvine",
+  "phase_or_building": "",
+  "prevailing_wage": false,
+  "time_in": "",
+  "time_out": "",
+  "lead": "Narciso?",
+  "helpers": [
+   "Doro?"
+  ],
+  "all_names_as_written": [
+   "Doro",
+   "Naysiso",
+   "Edgar"
+  ],
+  "name_guesses": {
+   "Naysiso": "Narciso Flores",
+   "Doro": "unknown (possibly a 2nd installer not on schedule, or part of the same name)",
+   "Edgar": "Edgar (builder super, not KT)"
+  },
+  "lines": [],
+  "totals_written": "none",
+  "notes_original": "No se instalo nada porque no an puesto el inpremiable Edgar diso que regresayamos el martes de la semana procsima",
+  "notes_english": "Nothing was installed because they haven't put up the waterproofing (impermeable). Edgar said to come back Tuesday of next week.",
+  "flags": [
+   "not_ready",
+   "return_visit",
+   "no_install",
+   "no_signature",
+   "no_times"
+  ],
+  "superintendent_signed": false,
+  "observations": "Return date expressed relatively ('next week Tuesday' = 2026-11-03?) -- needs a reschedule field. Schedule had Narciso solo; form shows two name tokens."
+ },
+ {
+  "file": "install",
+  "page": 7,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Century West",
+  "contractor": "KT Sales and Service",
+  "job_name": "Del Amo",
+  "city": "Torrens (Torrance)",
+  "phase_or_building": "",
+  "prevailing_wage": false,
+  "time_in": "10:00",
+  "time_out": "4:00",
+  "lead": "Narciso?",
+  "helpers": [
+   "Dora?"
+  ],
+  "all_names_as_written": [
+   "Dora",
+   "Narsiso"
+  ],
+  "name_guesses": {
+   "Narsiso": "Narciso Flores",
+   "Dora": "unknown, same token as 'Doro' on p6"
+  },
+  "lines": [
+   {
+    "lot": "121",
+    "product_or_sku": "PR6342BFT (written DRG342BFT/PRG342BFT)",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "125",
+    "product_or_sku": "PR6342BFT (written DRG342BFT/PRG342BFT)",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "127",
+    "product_or_sku": "PR6342BFT (written DRG342BFT/PRG342BFT)",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "129",
+    "product_or_sku": "PR6342BFT (written DRG342BFT/PRG342BFT)",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "116?",
+    "product_or_sku": "PR6342BFT (written DRG342BFT/PRG342BFT)",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "216",
+    "product_or_sku": "PR6342BFT (written DRG342BFT/PRG342BFT)",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "218",
+    "product_or_sku": "PR6342BFT (written DRG342BFT/PRG342BFT)",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "220",
+    "product_or_sku": "PR6342BFT (written DRG342BFT/PRG342BFT)",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "221",
+    "product_or_sku": "PR6342BFT",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3 used as lot#, SKU in option"
+   },
+   {
+    "lot": "223",
+    "product_or_sku": "PR6342BFT",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3 used as lot#, SKU in option"
+   },
+   {
+    "lot": "225",
+    "product_or_sku": "PR6342BFT",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3 used as lot#, SKU in option"
+   },
+   {
+    "lot": "227",
+    "product_or_sku": "PR6342BFT",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3 used as lot#, SKU in option"
+   },
+   {
+    "lot": "229",
+    "product_or_sku": "PR6342BFT",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3 used as lot#, SKU in option"
+   }
+  ],
+  "totals_written": "Installed tubs 13 (line count matches 13)",
+  "notes_original": "Se completo todo lo que estava listo",
+  "notes_english": "Everything that was ready was completed.",
+  "flags": [
+   "partial",
+   "no_signature",
+   "unscheduled_stop"
+  ],
+  "superintendent_signed": false,
+  "observations": "Same handwriting as p6. Narciso was scheduled only to Irvine but also has a Del Amo (Torrance) WO at 10:00-4:00 -- day reassigned after Irvine wasn't ready; schedule sheet not updated. Gilberto's crew also at Del Amo same day (p3)."
+ },
+ {
+  "file": "install",
+  "page": 8,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Lennar",
+  "contractor": "KT Sales and Service",
+  "job_name": "Oro Mesa Verde",
+  "city": "San Diego",
+  "phase_or_building": "Phase 4",
+  "prevailing_wage": false,
+  "time_in": "8:?? (minutes blank)",
+  "time_out": "11:50",
+  "lead": "Ascencion",
+  "helpers": [
+   "Juan Godines"
+  ],
+  "all_names_as_written": [
+   "Ascencion",
+   "JUAN Godines"
+  ],
+  "name_guesses": {
+   "Ascencion": "Ascencion Perez",
+   "JUAN Godines": "Juan Godinez"
+  },
+  "lines": [
+   {
+    "lot": "16",
+    "product_or_sku": "APR6034",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "16",
+    "product_or_sku": "ART6032WS-20",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "17",
+    "product_or_sku": "APR6034",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "17",
+    "product_or_sku": "ART6032WS-20",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "18",
+    "product_or_sku": "APR6034",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "18",
+    "product_or_sku": "ART6032WS-20",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "18",
+    "product_or_sku": "ART6032WS-20",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "other"
+   },
+   {
+    "lot": "19",
+    "product_or_sku": "APR6034",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "19",
+    "product_or_sku": "ART6032WS-20",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "20",
+    "product_or_sku": "APR6034",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "20",
+    "product_or_sku": "ART6032WS-20",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   }
+  ],
+  "totals_written": "Installed 11 (matches)",
+  "notes_original": "",
+  "notes_english": "",
+  "flags": [
+   "no_signature"
+  ],
+  "superintendent_signed": false,
+  "observations": "Job # '1'. Old fax-copy form variant (bathtub logo). Long SKUs span 2-3 columns."
+ },
+ {
+  "file": "install",
+  "page": 9,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Sherwood Mech.",
+  "contractor": "KT Sales and Service",
+  "job_name": "6TH Palm",
+  "city": "San Diego",
+  "phase_or_building": "Level 4-3",
+  "prevailing_wage": false,
+  "time_in": "12:-- ",
+  "time_out": "3:30",
+  "lead": "Ascencion",
+  "helpers": [
+   "Juan Godines"
+  ],
+  "all_names_as_written": [
+   "Ascencion",
+   "JUAN Godiner?"
+  ],
+  "name_guesses": {
+   "Ascencion": "Ascencion Perez",
+   "JUAN Godiner?": "Juan Godinez"
+  },
+  "lines": [
+   {
+    "lot": "413",
+    "product_or_sku": "ART6036WS-20",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "401",
+    "product_or_sku": "ART6036WS-20",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "402",
+    "product_or_sku": "ART6036WS-20",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "411",
+    "product_or_sku": "ART6036WS-20",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "412",
+    "product_or_sku": "ART6036WS-20",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "410",
+    "product_or_sku": "ART6036WS-20",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "408",
+    "product_or_sku": "ART6036WS-20",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed"
+   },
+   {
+    "lot": "310",
+    "product_or_sku": "ART6036WS-20",
+    "hand": "L",
+    "qty": 1,
+    "status": "pulled out & reset"
+   }
+  ],
+  "totals_written": "Installed 8",
+  "notes_original": "(on line 310) Pull out Resset",
+  "notes_english": "Lot 310: pulled out and reset (rework of an existing tub)",
+  "flags": [
+   "rework",
+   "no_signature"
+  ],
+  "superintendent_signed": false,
+  "observations": "Job # '2' = second stop. Rework recorded inline in OPTION/OTHER columns; no field for rework/back-charge."
+ },
+ {
+  "file": "install",
+  "page": 10,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Lennar (written 'lennas')",
+  "contractor": "KT Sales and Service",
+  "job_name": "Harvest (written 'Harres?')",
+  "city": "Jurupa Valley",
+  "phase_or_building": "",
+  "prevailing_wage": false,
+  "time_in": "",
+  "time_out": "",
+  "lead": "Daniel",
+  "helpers": [
+   "Ivan",
+   "Oscar"
+  ],
+  "all_names_as_written": [
+   "Daniel",
+   "Ivan",
+   "Oscas",
+   "CN (typed in INITIAL)"
+  ],
+  "name_guesses": {
+   "Daniel": "Daniel Zavala",
+   "Ivan": "Ivan T",
+   "Oscas": "Oscar C",
+   "CN": "office initials (unknown)"
+  },
+  "lines": [
+   {
+    "lot": "65",
+    "product_or_sku": "ET1194L? (written ET1194L / ET11942?)",
+    "hand": "L?",
+    "qty": 1,
+    "status": "installed"
+   }
+  ],
+  "totals_written": "none",
+  "notes_original": "",
+  "notes_english": "",
+  "flags": [
+   "incomplete_form",
+   "no_signature",
+   "no_times"
+  ],
+  "superintendent_signed": false,
+  "observations": "Only 1 line, no totals/times. 'CN' pre-printed/typed in INITIAL -- office pre-fills forms."
+ },
+ {
+  "file": "install",
+  "page": 11,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Monte Vista Home",
+  "contractor": "KT Sales and Service",
+  "job_name": "De Anza",
+  "city": "Riverside",
+  "phase_or_building": "",
+  "prevailing_wage": false,
+  "time_in": "",
+  "time_out": "",
+  "lead": "Daniel",
+  "helpers": [
+   "Ivan",
+   "Oscar"
+  ],
+  "all_names_as_written": [
+   "Daniel",
+   "Ivan",
+   "oscar",
+   "CN (typed INITIAL)"
+  ],
+  "name_guesses": {
+   "Daniel": "Daniel Zavala",
+   "Ivan": "Ivan T",
+   "oscar": "Oscar C"
+  },
+  "lines": [
+   {
+    "lot": "23",
+    "product_or_sku": "ET603280",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "23",
+    "product_or_sku": "ES603680",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "24",
+    "product_or_sku": "ES603680",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "25",
+    "product_or_sku": "ES603680",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "26",
+    "product_or_sku": "ET603280",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "26",
+    "product_or_sku": "ES603680",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "27",
+    "product_or_sku": "ET603280",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "27",
+    "product_or_sku": "ES603680",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "28",
+    "product_or_sku": "ET603286? (likely ET603280)",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   }
+  ],
+  "totals_written": "none",
+  "notes_original": "Tinas en unidades 24, 25 estan al revés se tienen que cambiar. Shower en lote 28 no listo faltan valvulas.",
+  "notes_english": "Tubs in units 24, 25 are backwards (wrong hand) and have to be changed. Shower in lot 28 not ready -- missing valves.",
+  "flags": [
+   "wrong_hand",
+   "not_ready",
+   "missing_parts",
+   "no_signature",
+   "no_times"
+  ],
+  "superintendent_signed": false,
+  "observations": "Notes reference 'units' and 'lote' interchangeably. Missing valves are the builder's (plumbing) not FCB parts -- 'missing' needs owner (us vs builder)."
+ },
+ {
+  "file": "install",
+  "page": 12,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Lennar (written 'Lennar' as 'Cennar')",
+  "contractor": "KT Sales and Service",
+  "job_name": "Skyline",
+  "city": "Jurupa Valley",
+  "phase_or_building": "",
+  "prevailing_wage": false,
+  "time_in": "7:00",
+  "time_out": "10:05",
+  "lead": "Roberto Mtz",
+  "helpers": [
+   "Jesus Reyes"
+  ],
+  "all_names_as_written": [
+   "RobertoMtz",
+   "Jesus Reyes"
+  ],
+  "name_guesses": {
+   "RobertoMtz": "Roberto Martinez",
+   "Jesus Reyes": "Jesus Reyes"
+  },
+  "lines": [
+   {
+    "lot": "69",
+    "product_or_sku": "60x36 RH",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "69",
+    "product_or_sku": "60x32 RH",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "64",
+    "product_or_sku": "60x36 LH",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "64",
+    "product_or_sku": "60x32 LH",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3"
+   },
+   {
+    "lot": "65",
+    "product_or_sku": "60x36 RH",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "65",
+    "product_or_sku": "60x32 LH",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3"
+   }
+  ],
+  "totals_written": "Installed tubs 6",
+  "notes_original": "Lot #69 60x32 RH ocupa reparacion. No Super!!! No Firma!!!  (each SKU has small 'et ro' annotation above it)",
+  "notes_english": "Lot #69 60x32 RH needs repair. No superintendent!!! No signature!!!",
+  "flags": [
+   "repair_needed",
+   "no_signature",
+   "no_super_onsite"
+  ],
+  "superintendent_signed": false,
+  "observations": "Job # '1'. Products written as size+hand (60x36 RH) not SKU; tiny 'et ro' marker above each item (meaning unclear -- maybe product line/finish code). 'ocupa' = needs (colloquial)."
+ },
+ {
+  "file": "install",
+  "page": 13,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Lennar (written 'Lennor')",
+  "contractor": "KT Sales and Service",
+  "job_name": "Outbound",
+  "city": "Rialto",
+  "phase_or_building": "",
+  "prevailing_wage": false,
+  "time_in": "11:00",
+  "time_out": "2:30",
+  "lead": "Roberto mtz",
+  "helpers": [
+   "Jesus Reyes"
+  ],
+  "all_names_as_written": [
+   "Roberto mtz",
+   "Jesus Reyes"
+  ],
+  "name_guesses": {
+   "Roberto mtz": "Roberto Martinez"
+  },
+  "lines": [
+   {
+    "lot": "86",
+    "product_or_sku": "102x42 LH",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "86",
+    "product_or_sku": "60x32 RH",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "86",
+    "product_or_sku": "60x32 RH",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3"
+   },
+   {
+    "lot": "87",
+    "product_or_sku": "60x32 LH",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3"
+   },
+   {
+    "lot": "87",
+    "product_or_sku": "60x42",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "option"
+   },
+   {
+    "lot": "88",
+    "product_or_sku": "60x32 RH",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "88",
+    "product_or_sku": "60x42",
+    "hand": "",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "option"
+   },
+   {
+    "lot": "89",
+    "product_or_sku": "102x42 RH",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "89",
+    "product_or_sku": "60x32 LH",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath2"
+   },
+   {
+    "lot": "89",
+    "product_or_sku": "60x32 LH",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3"
+   }
+  ],
+  "totals_written": "Installed tubs 10, walls 2",
+  "notes_original": "No habia Supervisor por eso no firma",
+  "notes_english": "There was no supervisor, so no signature.",
+  "flags": [
+   "no_signature",
+   "no_super_onsite"
+  ],
+  "superintendent_signed": false,
+  "observations": "Only form with walls total. 'et ro' annotations again. Tub count 10 seems to include all 10 items; walls 2 maybe the 60x42 options -- ambiguous double count."
+ },
+ {
+  "file": "install",
+  "page": 14,
+  "form_type": "installation",
+  "date": "2026-10-29",
+  "customer": "Production Plus Plumbing",
+  "contractor": "KT Sales and Service",
+  "job_name": "Bellamy",
+  "city": "Agoura",
+  "phase_or_building": "",
+  "prevailing_wage": false,
+  "time_in": "9:00",
+  "time_out": "1:30",
+  "lead": "Agustin",
+  "helpers": [
+   "Anthony"
+  ],
+  "all_names_as_written": [
+   "Agustin",
+   "ANTHONY"
+  ],
+  "name_guesses": {
+   "Agustin": "Agustin Contreras",
+   "ANTHONY": "Anthony Morales"
+  },
+  "lines": [
+   {
+    "lot": "130?",
+    "product_or_sku": "RT6032-18 (written RT603218)",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "144",
+    "product_or_sku": "RT6032-18 (written RT603218)",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "244?",
+    "product_or_sku": "RT6032-18 (written RT603218)",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "315",
+    "product_or_sku": "RT6032-18 (written RT603218)",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "344",
+    "product_or_sku": "RT6032-18 (written RT603218)",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "414",
+    "product_or_sku": "RT6032-18 (written RT603218)",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "413",
+    "product_or_sku": "RT6032-18 (written RT603218)",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "412",
+    "product_or_sku": "RT6032-18 (written RT603218)",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "master"
+   },
+   {
+    "lot": "411",
+    "product_or_sku": "RT6032-18",
+    "hand": "R",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3 used as lot#"
+   },
+   {
+    "lot": "404",
+    "product_or_sku": "RT6032-18",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3 used as lot#"
+   },
+   {
+    "lot": "405",
+    "product_or_sku": "RT6032-18",
+    "hand": "L",
+    "qty": 1,
+    "status": "installed",
+    "form_column": "bath3 used as lot#"
+   }
+  ],
+  "totals_written": "Installed 11 (matches)",
+  "notes_original": "",
+  "notes_english": "",
+  "flags": [
+   "no_signature"
+  ],
+  "superintendent_signed": false,
+  "observations": "Another form variant (PHONE #). Bleed-through from reverse side visible. Lots span multiple floors with no phase given."
+ },
+ {
+  "file": "stocking",
+  "page": 1,
+  "form_type": "schedule",
+  "date": "2026-10-30",
+  "title": "DAILY STOCKING SHEET - STOCKING ON: FRIDAY, OCTOBER 30, 2026",
+  "crews": [
+   {
+    "lead": "JOSE REA",
+    "helpers": [
+     "HUGO SOSA",
+     "ANTONIO ZAVALA"
+    ],
+    "stops": [
+     {
+      "customer": "MG PLUMBING",
+      "job": "FOUNTAIN VALLEY",
+      "city": "LONG BEACH",
+      "work": "stock",
+      "notes": "handwritten purple time-in 'L:40' (likely 6:40); 'done' in TIME OUT"
+     }
+    ]
+   },
+   {
+    "lead": "LUIS AMAPA",
+    "helpers": [
+     "JOSE RIOS",
+     "FABIAN REYES"
+    ],
+    "stops": [
+     {
+      "customer": "MG PLUMBING",
+      "job": "FOUNTAIN VALLEY",
+      "city": "LONG BEACH",
+      "work": "stock",
+      "notes": "purple 'L:53' (6:53?); 'done'"
+     }
+    ]
+   },
+   {
+    "lead": "MARCO VALADEZ",
+    "helpers": [
+     "JUAN ABARCA",
+     "CELSO CISNEROS",
+     "JESUS ACEVES"
+    ],
+    "stops": [
+     {
+      "customer": "NEW HOME",
+      "job": "ASHBURY",
+      "city": "EASTVALE",
+      "work": "stock (ES)",
+      "notes": "purple 'L:47' (6:47?); 'ES' printed in TIME OUT row"
+     },
+     {
+      "customer": "WESTERN NATIONAL",
+      "job": "DISCVOVERY PARK (sic)",
+      "city": "IRVINE",
+      "work": "stock (ES)",
+      "notes": "'ES' in TIME OUT row; purple 'done'"
+     }
+    ]
+   }
+  ],
+  "all_names_as_written": [
+   "JOSE REA",
+   "HUGO SOSA",
+   "ANTONIO ZAVALA",
+   "LUIS AMAPA",
+   "JOSE RIOS",
+   "FABIAN REYES",
+   "MARCO VALADEZ",
+   "JUAN ABARCA",
+   "CELSO CISNEROS",
+   "JESUS ACEVES"
+  ],
+  "layout_description": "Printed landscape sheet (scanned rotated). Title 'DAILY STOCKING SHEET', 'STOCKING ON: <day, date>'. Row labels on the left: (header = lead), STOCKER x2 rows (helpers), TIME IN, BUILDER, JOB, CITY, TIME OUT, blank row; then a second identical block (TIME IN, BUILDER, JOB, CITY, TIME OUT, blank) for stop 2. 3 crew columns. A 3rd helper overflows into the TIME IN row (Jesus Aceves). Dispatcher annotates in purple pen: check-in times and 'done'.",
+  "observations": "Hydroflow Fire Pro / Slauson Ave LA stops (pages 3,5) are NOT on the schedule -- both MG crews were redirected after cancellation. 'ES' meaning unclear (product line? 'estaquear'?). Typo DISCVOVERY in printed sheet."
+ },
+ {
+  "file": "stocking",
+  "page": 2,
+  "form_type": "stocking",
+  "date": "2026-10-30",
+  "customer": "MG PLUMBING",
+  "contractor": "KT Sales and Service (form branded Fiber Care Baths, Inc.)",
+  "job_name": "FOUNTAIN VALLEY APTS",
+  "city": "LONG BEACH",
+  "phase_or_building": "BLDG # A",
+  "prevailing_wage": true,
+  "time_in": "7:00 AM",
+  "time_out": "9:00 AM",
+  "lead": "JOSE REA",
+  "helpers": [
+   "HUGO SOSA",
+   "ANTONIO ZAVALA"
+  ],
+  "all_names_as_written": [
+   "JOSE REA",
+   "HUGO SOSA",
+   "ANTONIO ZAVALA"
+  ],
+  "name_guesses": {},
+  "lines": [],
+  "totals_written": "none (column header product: ET 60-30 HC)",
+  "notes_original": "(diagonal across grid) SE CANCELO ESTE TRABAJO. NOTES: EN ESTE TRABAJO NO RECIBIERO EL DELIVERY QUE PORQUE NO AVIAN PEDIDO LAS TINAS AUN Y NO ESTA LISTO ESTE TRABAJO. (bottom) PREW WAGE",
+  "notes_english": "This job was canceled. They did not receive the delivery, supposedly because they hadn't ordered the tubs yet, and this job is not ready. Prevailing wage.",
+  "flags": [
+   "canceled",
+   "not_ready",
+   "delivery_refused",
+   "prevailing_wage_hours_logged"
+  ],
+  "superintendent_signed": false,
+  "observations": "PW handwritten ('PREW WAGE'), no checkbox. 2 hours logged on a canceled PW job -- still billable/payroll time. Product columns headed by handwritten SKU per column group, L/R sub-columns."
+ },
+ {
+  "file": "stocking",
+  "page": 3,
+  "form_type": "stocking",
+  "date": "2026-10-30",
+  "customer": "HYDROFLOW FIRE",
+  "contractor": "KT Sales and Service (form branded Fiber Care Baths, Inc.)",
+  "job_name": "SLAUSON AVE",
+  "city": "LOS ANGELES",
+  "phase_or_building": "LEVEL 3,4,5",
+  "prevailing_wage": false,
+  "time_in": "10:00 AM",
+  "time_out": "3:30 (PM)",
+  "lead": "JOSE REA",
+  "helpers": [
+   "HUGO SOSA",
+   "ANTONIO ZAVALA"
+  ],
+  "all_names_as_written": [
+   "JOSE REA",
+   "HUGO SOSA",
+   "ANTONIO ZAVALA",
+   "Edgar Fernandez"
+  ],
+  "name_guesses": {
+   "Edgar Fernandez": "builder superintendent signature"
+  },
+  "lines": [
+   {
+    "lot": "313",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "314",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "315",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "401",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "402",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "403",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "404",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "405",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "407",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "408",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "409",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "410",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "412",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "413",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "414",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "415",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "501",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "503",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "505",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "507",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "510",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "512",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "513",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   }
+  ],
+  "totals_written": "Total units stocked 23; corner tally '17 LH 6 RH' (matches lines)",
+  "notes_original": "TODO QUEDO BIEN DENTRO DE LOS BANOS.",
+  "notes_english": "Everything was left fine inside the bathrooms.",
+  "flags": [
+   "unscheduled_stop"
+  ],
+  "superintendent_signed": true,
+  "observations": "Super signs diagonally across the lot grid (no signature box). Crew hand-tallies LH/RH in corner. Level sub-headers written inside LOTS column; 2nd product column group reused as a 2nd lot column for Level 5."
+ },
+ {
+  "file": "stocking",
+  "page": 4,
+  "form_type": "stocking",
+  "date": "2026-10-30",
+  "customer": "MG Plumbing",
+  "contractor": "KT Sales and Service (form branded Fiber Care Baths, Inc.)",
+  "job_name": "Fountain Valley",
+  "city": "Long Beach",
+  "phase_or_building": "",
+  "prevailing_wage": true,
+  "time_in": "7:00 AM",
+  "time_out": "9:00 AM",
+  "lead": "Luis Amapa",
+  "helpers": [
+   "Fabian Reyes",
+   "Jose Rios"
+  ],
+  "all_names_as_written": [
+   "Luis Amapa",
+   "Fabian Reyes",
+   "Jose Ros?"
+  ],
+  "name_guesses": {
+   "Jose Ros?": "Jose Rios"
+  },
+  "lines": [],
+  "totals_written": "0 (written in IN BATH/UNIT and WALLS)",
+  "notes_original": "Aun no quieren las tinas. El trabajo no esta listo. Todas las tinas se regresaron.",
+  "notes_english": "They still don't want the tubs. The job isn't ready. All the tubs were returned.",
+  "flags": [
+   "canceled",
+   "not_ready",
+   "material_returned",
+   "prevailing_wage_hours_logged"
+  ],
+  "superintendent_signed": false,
+  "observations": "'Prev. wage' handwritten at top; circled '1' = stop #1. Newer form version with AMT STOCKED / AMT STOCK PILED columns. Tubs returned -> inventory movement implied but not recorded."
+ },
+ {
+  "file": "stocking",
+  "page": 5,
+  "form_type": "stocking",
+  "date": "2026-10-30",
+  "customer": "HydroFlow Fire Pro",
+  "contractor": "KT Sales and Service (form branded Fiber Care Baths, Inc.)",
+  "job_name": "3455 Slauson Ave",
+  "city": "Los Angeles",
+  "phase_or_building": "",
+  "prevailing_wage": false,
+  "time_in": "10:00 AM",
+  "time_out": "3:30 PM",
+  "lead": "Luis Amapa",
+  "helpers": [
+   "Fabian Reyes",
+   "Jose Rios"
+  ],
+  "all_names_as_written": [
+   "Luis Amapa",
+   "Fabian Reyes",
+   "Jose Rios"
+  ],
+  "name_guesses": {},
+  "lines": [
+   {
+    "lot": "201",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "202",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "203",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "204",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "205",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "206",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "207",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "208",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "209",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "210",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "211",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "212",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "213",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "214",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "215",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "301",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "302",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "303",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "304",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "305",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "306",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "307",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "308",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "309",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "310",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "311",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "312",
+    "product_or_sku": "ET 60-30 HC",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   }
+  ],
+  "totals_written": "Total units stocked 27 (matches)",
+  "notes_original": "todo se estaqueo y se metio al baño",
+  "notes_english": "Everything was stocked and put into the bathroom.",
+  "flags": [
+   "unscheduled_stop",
+   "no_signature"
+  ],
+  "superintendent_signed": false,
+  "observations": "Circled '2' = stop #2. Same site/times as Jose Rea crew (p3); crews split lot ranges (201-312 vs 313-513). Checkmarks are '+' here vs 'X' on p3."
+ },
+ {
+  "file": "stocking",
+  "page": 6,
+  "form_type": "stocking",
+  "date": "2026-10-30",
+  "customer": "New home",
+  "contractor": "KT Sales and Service (form branded Fiber Care Baths, Inc.)",
+  "job_name": "Ashbury",
+  "city": "Eastvale",
+  "phase_or_building": "Phase-3",
+  "prevailing_wage": false,
+  "time_in": "7:00 AM",
+  "time_out": "10:50 AM",
+  "lead": "Marco Valadez",
+  "helpers": [
+   "Juan Abarca",
+   "Celso Cisneros",
+   "Jesus Aceves"
+  ],
+  "all_names_as_written": [
+   "Marco Valadez",
+   "Juan Abarca",
+   "Celso Cisneros",
+   "Jesus Aceves"
+  ],
+  "name_guesses": {},
+  "lines": [
+   {
+    "lot": "152",
+    "product_or_sku": "ET6032RT? 80S1224H",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "152",
+    "product_or_sku": "ES6036WS 80S1224 (W-Backing)",
+    "hand": "",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "155",
+    "product_or_sku": "ET6032RT? 80S1224H",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "155",
+    "product_or_sku": "ES6036WS 80S1224 (W-Backing)",
+    "hand": "",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "156",
+    "product_or_sku": "ET6032RT? 80S1224H",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "156",
+    "product_or_sku": "ES6036WS 80S1224 (W-Backing)",
+    "hand": "",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "157",
+    "product_or_sku": "ET6032RT? 80S1224H",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "157",
+    "product_or_sku": "ES6036WS 80S1224",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   }
+  ],
+  "totals_written": "In bath/unit 8; in garage 0. In-grid: 'RESTOCK - 8 - TUBS', 'ROOM-IN - 30 TUBS & SHOWERS', 'RESTOCK + ROOM-IN' in right margin",
+  "notes_original": "(grid) TODO SE ESTAQUEO SIN DAÑOS. NOTES: TAMBIEN SE METIERON A LOS BAÑOS UNIDADES QUE ESTABAN PENDIENTES",
+  "notes_english": "Everything was stocked without damage. Also moved into the bathrooms units that were pending (previously stockpiled).",
+  "flags": [
+   "restock",
+   "room_in"
+  ],
+  "superintendent_signed": false,
+  "observations": "Circled '1'. Two kinds of work: 'restock' (8 new) and 'room-in' (30 previously stockpiled units moved into bathrooms) -- room-in has no lot detail. Garage vs bath location tracked."
+ },
+ {
+  "file": "stocking",
+  "page": 7,
+  "form_type": "stocking",
+  "date": "2026-10-30",
+  "customer": "Western National",
+  "contractor": "KT Sales and Service (form branded Fiber Care Baths, Inc.)",
+  "job_name": "Discovery Park",
+  "city": "Irvine",
+  "phase_or_building": "Phase-1, Levels 3 & 4",
+  "prevailing_wage": false,
+  "time_in": "12:25",
+  "time_out": "1:40",
+  "lead": "Marco Valadez",
+  "helpers": [
+   "Juan Abarca",
+   "Celso Cisneros",
+   "Jesus Aceves"
+  ],
+  "all_names_as_written": [
+   "Marco Valadez",
+   "Juan Abarca",
+   "Celso Cisneros",
+   "Jesus Aceves"
+  ],
+  "name_guesses": {},
+  "lines": [
+   {
+    "lot": "1315",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1317",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1318",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "R",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1469",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1470",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1471",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1472",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1473",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1458",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1459",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1460",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1461",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1462",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1463",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1464",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1465",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1466",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1467",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   },
+   {
+    "lot": "1468",
+    "product_or_sku": "PR BF 63-40.5 (written 63-405)",
+    "hand": "L",
+    "qty": 1,
+    "status": "stocked"
+   }
+  ],
+  "totals_written": "Total units stocked 19 (matches)",
+  "notes_original": "SE ESTAQUEARON LAS UNIDADES QUE ESTABAN LISTAS. PH1 - LEVELS- 3,4. COMO EN UNA SEMANA HABRA MAS UNIDADES PARA ESTAQUEAR. (margin) RESTOCK",
+  "notes_english": "Stocked the units that were ready (PH1 levels 3,4). In about a week there will be more units to stock.",
+  "flags": [
+   "partial",
+   "return_visit",
+   "restock",
+   "no_signature"
+  ],
+  "superintendent_signed": false,
+  "observations": "Circled '2'. Unit numbers are 4-digit apartment numbers; '1315' under 'Level-3' but 1458-1468 under Level-4 and 1469-1473 unlabeled. Same site where install (p6, 10/29) found no waterproofing."
+ }
+]
