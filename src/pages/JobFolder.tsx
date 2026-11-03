@@ -8,6 +8,7 @@ import type { JobSummary, WoStatus, WoType } from '@/lib/types';
 import NotesPanel from '@/components/NotesPanel';
 import FilesPanel from '@/components/FilesPanel';
 import NewWorkOrder from '@/components/NewWorkOrder';
+import WorkDoneList, { type DoneLine } from '@/components/WorkDoneList';
 import { Button, Card, ErrorBox, Field, Modal, PwBadge, Spinner, StatusText, TypePill, cx, inputCls } from '@/components/ui';
 
 interface Job {
@@ -20,6 +21,7 @@ interface Job {
 interface Area { id: string; parent_id: string | null; kind: string; name: string; sort_order: number }
 interface Lot { id: string; area_id: string | null; lot_number: string }
 interface Wo { id: string; number: string; type_code: WoType; status: WoStatus; scheduled_date: string | null; scope: string | null;
+  status_reason: string | null; completion_notes: string | null; completion_notes_en: string | null; lines: DoneLine[];
   flags: { id: string; resolved_at: string | null; type: { severity: number } }[]; locations: { area_id: string | null; lot_id: string | null; label: string | null }[];
   workers: { employee: { display_name: string } | null; raw_name: string | null }[] }
 interface Ship { id: string; order_number: string | null; ship_date: string | null; status: string; notes: string | null; facility_code: string;
@@ -113,7 +115,7 @@ export default function JobFolder() {
       must(
         await supabase
           .from('work_orders')
-          .select('id, number, type_code, status, scheduled_date, scope, flags:work_order_flags!work_order_flags_work_order_id_fkey(id, resolved_at, type:flag_types(severity)), locations:work_order_locations(area_id, lot_id, label), workers:work_order_workers(raw_name, employee:employees(display_name))')
+          .select('id, number, type_code, status, scheduled_date, scope, status_reason, completion_notes, completion_notes_en, lines:work_order_lines(lot_label, room, raw_product, hand, qty_planned, qty_done, status, sort_order), flags:work_order_flags!work_order_flags_work_order_id_fkey(id, resolved_at, type:flag_types(severity)), locations:work_order_locations(area_id, lot_id, label), workers:work_order_workers(raw_name, employee:employees(display_name))')
           .eq('job_id', id)
           .order('scheduled_date', { ascending: false, nullsFirst: true }),
       ) as unknown as Wo[],
@@ -231,6 +233,11 @@ export default function JobFolder() {
                         {e.w.workers.map((x) => x.employee?.display_name ?? x.raw_name).join(', ')}
                         {e.w.locations.some((l) => l.label) && ` · ${e.w.locations.map((l) => l.label).filter(Boolean).join(', ')}`}
                       </div>
+                      {e.w.status === 'canceled' && e.w.status_reason && <p className="text-sm text-slate-700"><b>Canceled:</b> {e.w.status_reason}</p>}
+                      <WorkDoneList lines={e.w.lines} />
+                      {(e.w.completion_notes_en || e.w.completion_notes) && e.w.status !== 'canceled' && (
+                        <p className="mt-1 text-sm text-slate-700"><b className="text-slate-900">Crew note:</b> {e.w.completion_notes_en || e.w.completion_notes}</p>
+                      )}
                     </div>
                   </Link>
                 ) : (
@@ -238,7 +245,11 @@ export default function JobFolder() {
                     <div><div className="text-xs font-bold text-slate-600 uppercase">{e.s.ship_date ? shortDate(e.s.ship_date).split('/').slice(0, 2).join('/') : 'TBD'}</div><div className="text-sm text-slate-500">{e.s.ship_date?.slice(0, 4)}</div></div>
                     <div className="flex flex-col gap-1">
                       <div className="flex flex-wrap items-center gap-2"><span className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-bold text-slate-700 uppercase">Shipment</span><span className="font-mono text-[13px]">{e.s.order_number}</span><span className="text-[13px] text-slate-600 capitalize">{e.s.facility_code}</span><span className="flex-1" /><span className="text-xs font-bold text-green-800 capitalize">{e.s.status}</span></div>
-                      <div className="text-sm font-semibold">{e.s.lines.map((l) => `${l.quantity}× ${l.raw_product_name}`).join(' · ')}</div>
+                      <ul className="flex flex-col gap-0.5 text-sm">
+                        {e.s.lines.map((l, i) => (
+                          <li key={i} className="flex gap-2"><span aria-hidden="true" className="text-slate-400">•</span><span><b className="font-semibold">{l.quantity}×</b> <span className="font-mono text-[13px]">{l.raw_product_name}</span></span></li>
+                        ))}
+                      </ul>
                       {e.s.notes && <div className="text-[13px] text-slate-600">{e.s.notes}</div>}
                     </div>
                   </div>
