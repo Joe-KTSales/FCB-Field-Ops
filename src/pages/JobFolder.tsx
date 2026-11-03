@@ -180,7 +180,7 @@ export default function JobFolder() {
           <div><span className="text-slate-600">Customer</span> <Link to={`/customers/${j.customer.id}`} className="font-bold text-slate-900">{j.customer.name}</Link></div>
           {j.parties.map((p) => <div key={p.id}><span className="text-slate-600 capitalize">{p.role.replace('_', ' ')}</span> <b>{p.company.name}</b></div>)}
           {j.city && <div><span className="text-slate-600">City</span> <b>{j.city}</b></div>}
-          {j.facility_code && <div><span className="text-slate-600">Plant</span> <b className="capitalize">{j.facility_code}</b></div>}
+          {j.address && <div><span className="text-slate-600">Address</span> <b>{j.address}</b></div>}
           {j.contacts.map((c) => <div key={c.id}><span className="text-slate-600">{c.role ?? 'Contact'}</span> <b>{c.contact.name}</b>{c.contact.phone && <> · <a href={`tel:${c.contact.phone}`}>{c.contact.phone}</a></>}</div>)}
           {canEdit && <button onClick={() => setPartyOpen(true)} className="rounded-md border border-dashed border-slate-400 px-2.5 py-1 text-[13px] font-semibold text-slate-700">+ Add party or contact</button>}
         </div>
