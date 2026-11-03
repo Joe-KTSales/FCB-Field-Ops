@@ -14,7 +14,7 @@ interface Sheet {
   page?: number; form_type?: string; date?: string | null; customer?: string | null; job_name?: string | null; city?: string | null; area?: string | null;
   prevailing_wage_marked?: boolean; time_in?: string | null; time_out?: string | null; lead?: string | null; helpers?: string[];
   lines?: SheetLine[]; notes_original?: string | null; notes_english?: string | null; flags?: string[]; flag_details?: Record<string, string>;
-  superintendent_name?: string | null; superintendent_signed?: boolean; uncertain_fields?: string[]; confidence?: number;
+  superintendent_name?: string | null; superintendent_signed?: boolean; uncertain_fields?: string[]; confidence?: number; read_error?: string;
   job_candidates?: { job_id: string; job_name: string; customer_name: string; city: string | null }[];
   work_order_candidates?: { id: string; number: string; type_code: string; status: string; job_id: string }[];
   name_matches?: { raw: string; position: string; candidates: { employee_id: string; display_name: string; score: number }[] }[];
@@ -194,6 +194,7 @@ function SheetReview({ scan, idx, sheet, onDone }: { scan: Scan; idx: number; sh
           {sheet.prevailing_wage_marked && <span className="rounded bg-violet-100 px-1.5 text-xs font-bold text-violet-800">“PW” written on sheet</span>}
           {typeof sheet.confidence === 'number' && <span className={cx('ml-auto text-xs font-semibold', sheet.confidence < 0.7 ? 'text-amber-800' : 'text-slate-500')}>read confidence {Math.round(sheet.confidence * 100)}%</span>}
         </div>
+        {sheet.read_error && <p className="rounded bg-amber-50 px-2 py-1.5 text-sm text-amber-900">Claude couldn’t read this page, so it’s blank — fill it in from the scan.</p>}
         <div className="grid gap-3 sm:grid-cols-[auto_1fr]">
           <Field label="Date on the sheet"><input type="date" className={inputCls} value={pickedDate} onChange={(e) => { setPickedDate(e.target.value); setWoId(''); }} /></Field>
           <Field label="Which work order is this?" hint={dayWos.data && !dayWos.data.length ? 'Nothing was scheduled that day — create one from this sheet' : undefined}>

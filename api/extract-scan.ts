@@ -9,6 +9,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Anthropic from '@anthropic-ai/sdk';
 import { createClient } from '@supabase/supabase-js';
+import { PDFDocument } from 'pdf-lib';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
@@ -21,7 +22,7 @@ const PROMPT = `You are reading scanned paper work orders from KT Sales & Servic
 Forms are INSTALLATION, STOCKING (stocked vs stock-piled), or FINALS / REPAIR work orders, filled in by hand, often in Spanish crew shorthand.
 Each page is usually one work order. Some pages may be schedules or blank — mark those form_type "other".
 
-Return ONLY a JSON object, no prose, shaped exactly like:
+Record what you read by calling the record_sheets tool once, with one entry per page. Field guide:
 {"sheets":[{
   "page": 1,
   "form_type": "installation" | "stocking" | "finals" | "other",
@@ -56,11 +57,125 @@ Rules:
   material not ordered / delivery refused, no superintendent signature, photos sent by text.
 - Never invent data. Use null and list the field in uncertain_fields when you cannot read it.`;
 
-function extractJson(text: string) {
-  const start = text.indexOf('{');
-  const end = text.lastIndexOf('}');
-  if (start < 0 || end < 0) throw new Error('Model did not return JSON');
-  return JSON.parse(text.slice(start, end + 1));
+const PAGES_PER_BATCH = 3;
+const CONCURRENCY = 4;
+
+const str = { type: ['string', 'null'] };
+const SHEET_SCHEMA = {
+  type: 'object',
+  properties: {
+    sheets: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          page: { type: 'integer' },
+          form_type: { type: 'string', enum: ['installation', 'stocking', 'finals', 'other'] },
+          date: str, customer: str, job_name: str, city: str, area: str,
+          prevailing_wage_marked: { type: 'boolean' },
+          time_in: str, time_out: str, lead: str,
+          helpers: { type: 'array', items: { type: 'string' } },
+          lines: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                lot: str, room: str, product: str, hand: str, qty: { type: ['number', 'null'] },
+                status: { type: 'string', enum: LINE_STATUSES }, uncertain: { type: 'boolean' },
+              },
+            },
+          },
+          notes_original: str, notes_english: str,
+          flags: { type: 'array', items: { type: 'string', enum: FLAG_CODES } },
+          flag_details: { type: 'object', additionalProperties: { type: 'string' } },
+          superintendent_name: str, superintendent_signed: { type: 'boolean' },
+          totals_written: str,
+          uncertain_fields: { type: 'array', items: { type: 'string' } },
+          confidence: { type: 'number' },
+        },
+        required: ['page', 'form_type'],
+      },
+    },
+  },
+  required: ['sheets'],
+};
+
+type Block =
+  | { type: 'document'; source: { type: 'base64'; media_type: 'application/pdf'; data: string } }
+  | { type: 'image'; source: { type: 'base64'; media_type: 'image/jpeg' | 'image/png' | 'image/webp' | 'image/gif'; data: string } };
+
+/** One Claude call. Forced tool use means the answer always comes back as structured JSON. */
+async function readBlock(anthropic: Anthropic, block: Block, firstPage: number, pageCount: number) {
+  const where =
+    pageCount === 1
+      ? `This is page ${firstPage} of the scan. Use page ${firstPage}.`
+      : `These are pages ${firstPage}–${firstPage + pageCount - 1} of the scan. Number them ${firstPage} to ${firstPage + pageCount - 1}.`;
+  const msg = await anthropic.messages.create({
+    model: MODEL,
+    max_tokens: 12000,
+    tools: [{ name: 'record_sheets', description: 'Record the work order sheets read from the scan.', input_schema: SHEET_SCHEMA as Anthropic.Tool.InputSchema }],
+    tool_choice: { type: 'tool', name: 'record_sheets' },
+    messages: [{ role: 'user', content: [block, { type: 'text', text: `${PROMPT}\n\n${where}` }] }],
+  });
+  const use = msg.content.find((c) => c.type === 'tool_use');
+  const sheets = (use && (use.input as { sheets?: unknown }).sheets) as Record<string, unknown>[] | undefined;
+  if (msg.stop_reason === 'max_tokens' || !Array.isArray(sheets)) {
+    const said = msg.content.map((c) => (c.type === 'text' ? c.text : '')).join('').slice(0, 160);
+    throw new Error(`Reading pages ${firstPage}–${firstPage + pageCount - 1} stopped early (${msg.stop_reason})${said ? `: ${said}` : ''}`);
+  }
+  return sheets;
+}
+
+async function pool<T, R>(items: T[], n: number, fn: (t: T) => Promise<R>) {
+  const out: R[] = new Array(items.length);
+  let i = 0;
+  await Promise.all(Array.from({ length: Math.min(n, items.length) }, async () => {
+    while (i < items.length) { const k = i++; out[k] = await fn(items[k]); }
+  }));
+  return out;
+}
+
+async function pdfSlice(src: PDFDocument, from: number, count: number) {
+  const doc = await PDFDocument.create();
+  const pages = await doc.copyPages(src, Array.from({ length: count }, (_, k) => from + k));
+  pages.forEach((p) => doc.addPage(p));
+  return Buffer.from(await doc.save()).toString('base64');
+}
+
+/** Splits a PDF into small batches, reads them in parallel, and retries a failed batch one page at a time. */
+async function readScan(anthropic: Anthropic, bytes: Buffer, mime: string) {
+  if (mime !== 'application/pdf') {
+    const media = (['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(mime) ? mime : 'image/jpeg') as 'image/jpeg';
+    return readBlock(anthropic, { type: 'image', source: { type: 'base64', media_type: media, data: bytes.toString('base64') } }, 1, 1);
+  }
+  const src = await PDFDocument.load(bytes, { ignoreEncryption: true });
+  const total = src.getPageCount();
+  const batches: { from: number; count: number }[] = [];
+  for (let p = 0; p < total; p += PAGES_PER_BATCH) batches.push({ from: p, count: Math.min(PAGES_PER_BATCH, total - p) });
+  const pdfBlock = (data: string): Block => ({ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data } });
+
+  const results = await pool(batches, CONCURRENCY, async (b) => {
+    try {
+      return await readBlock(anthropic, pdfBlock(await pdfSlice(src, b.from, b.count)), b.from + 1, b.count);
+    } catch (e) {
+      if (b.count === 1) throw e;
+      const one: Record<string, unknown>[] = [];
+      for (let k = 0; k < b.count; k++) {
+        const page = b.from + k + 1;
+        try {
+          one.push(...(await readBlock(anthropic, pdfBlock(await pdfSlice(src, b.from + k, 1)), page, 1)));
+        } catch (e2) {
+          // Leave a blank sheet for this page so it can be entered by hand instead of failing the whole scan.
+          one.push({ page, form_type: 'unknown', lines: [], helpers: [], uncertain_fields: ['whole page'], confidence: 0,
+            read_error: e2 instanceof Error ? e2.message : String(e2) });
+        }
+      }
+      return one;
+    }
+  });
+  const sheets = results.flat();
+  if (sheets.length && sheets.every((s) => s.read_error)) throw new Error(String(sheets[0].read_error));
+  return sheets.sort((a, b) => Number(a.page ?? 0) - Number(b.page ?? 0));
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -122,22 +237,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (dl.error || !dl.data) throw new Error(dl.error?.message || 'Could not download the scan');
     const bytes = Buffer.from(await dl.data.arrayBuffer());
     const mime = file.mime_type || (file.storage_path.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
-    const data = bytes.toString('base64');
-
-    const block =
-      mime === 'application/pdf'
-        ? { type: 'document' as const, source: { type: 'base64' as const, media_type: 'application/pdf' as const, data } }
-        : { type: 'image' as const, source: { type: 'base64' as const, media_type: mime as 'image/jpeg' | 'image/png' | 'image/webp' | 'image/gif', data } };
-
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-    const msg = await anthropic.messages.create({
-      model: MODEL,
-      max_tokens: 16000,
-      messages: [{ role: 'user', content: [block, { type: 'text', text: PROMPT }] }],
-    });
-    const text = msg.content.map((c) => (c.type === 'text' ? c.text : '')).join('');
-    const parsed = extractJson(text) as { sheets: Record<string, unknown>[] };
-    const sheets = (parsed.sheets || []).filter((s) => s.form_type !== 'other');
+    const all = await readScan(anthropic, bytes, mime);
+    const sheets = all.filter((s) => s.form_type !== 'other');
 
     // Enrich each sheet with suggestions the reviewer can accept in one click.
     for (const s of sheets) {
