@@ -114,16 +114,27 @@ async function readBlock(anthropic: Anthropic, block: Block, firstPage: number, 
     model: MODEL,
     max_tokens: 12000,
     tools: [{ name: 'record_sheets', description: 'Record the work order sheets read from the scan.', input_schema: SHEET_SCHEMA as Anthropic.Tool.InputSchema }],
-    tool_choice: { type: 'tool', name: 'record_sheets' },
-    messages: [{ role: 'user', content: [block, { type: 'text', text: `${PROMPT}\n\n${where}` }] }],
+    // Some models reject a forced tool_choice, so ask for the tool and fall back to JSON in the text.
+    tool_choice: { type: 'auto' },
+    messages: [{ role: 'user', content: [block, { type: 'text', text: `${PROMPT}\n\n${where}\nCall record_sheets now — do not answer in text.` }] }],
   });
   const use = msg.content.find((c) => c.type === 'tool_use');
-  const sheets = (use && (use.input as { sheets?: unknown }).sheets) as Record<string, unknown>[] | undefined;
+  let sheets = (use && (use.input as { sheets?: unknown }).sheets) as Record<string, unknown>[] | undefined;
+  if (!Array.isArray(sheets)) sheets = jsonSheets(msg.content.map((c) => (c.type === 'text' ? c.text : '')).join(''));
   if (msg.stop_reason === 'max_tokens' || !Array.isArray(sheets)) {
     const said = msg.content.map((c) => (c.type === 'text' ? c.text : '')).join('').slice(0, 160);
     throw new Error(`Reading pages ${firstPage}–${firstPage + pageCount - 1} stopped early (${msg.stop_reason})${said ? `: ${said}` : ''}`);
   }
   return sheets;
+}
+
+function jsonSheets(text: string): Record<string, unknown>[] | undefined {
+  const a = text.indexOf('{'), b = text.lastIndexOf('}');
+  if (a < 0 || b <= a) return undefined;
+  try {
+    const v = JSON.parse(text.slice(a, b + 1));
+    return Array.isArray(v?.sheets) ? v.sheets : undefined;
+  } catch { return undefined; }
 }
 
 async function pool<T, R>(items: T[], n: number, fn: (t: T) => Promise<R>) {
