@@ -270,7 +270,7 @@ export default function Dispatch() {
               >
                 <div className="flex items-center gap-2 px-3 pt-3 pb-2">
                   <span className="h-3 w-3 rounded-sm" style={{ background: d.color ?? '#64748B' }} />
-                  <h2 className="text-base font-bold">{d.crew_name}</h2>
+                  <h2 className="text-base font-bold">{d.members.find((m) => m.position === 'lead')?.name ?? d.crew_name}</h2>
                   <span className="flex-1" />
                   <span className="text-xs text-slate-600">{d.stops.length} {d.stops.length === 1 ? 'stop' : 'stops'}</span>
                 </div>

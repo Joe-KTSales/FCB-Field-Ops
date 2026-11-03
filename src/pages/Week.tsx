@@ -65,7 +65,7 @@ function MonthView({ anchor }: { anchor: string }) {
           return (
             <button
               key={d}
-              onClick={() => nav(`/?date=${d}`)}
+              onClick={() => nav(`/dispatch?date=${d}`)}
               className={cx('flex min-h-24 flex-col gap-1 border-b border-l border-slate-200 p-2 text-left hover:bg-blue-50', parseISO(d).getMonth() !== month && 'bg-slate-50 text-slate-400', d === todayIso() && 'ring-2 ring-brand ring-inset')}
             >
               <span className="text-sm font-bold">{parseISO(d).getDate()}</span>
@@ -157,7 +157,7 @@ export default function Week() {
           </>
         )}
         <div role="group" aria-label="Range" className="flex gap-1 rounded-lg bg-slate-200 p-1">
-          <Link to={`/?date=${anchor}`} className="min-h-9 rounded-md px-3 py-2 text-sm font-semibold text-slate-600 no-underline">Day</Link>
+          <Link to={`/dispatch?date=${anchor}`} className="min-h-9 rounded-md px-3 py-2 text-sm font-semibold text-slate-600 no-underline">Day</Link>
           {(['week', 'month'] as const).map((r) => (
             <button key={r} onClick={() => set({ range: r })} className={cx('min-h-9 rounded-md px-3 text-sm font-semibold capitalize', range === r ? 'bg-white shadow-sm' : 'text-slate-600')}>{r}</button>
           ))}
@@ -173,7 +173,7 @@ export default function Week() {
             <div className={cx('grid border-b border-slate-300 bg-slate-50', cols)}>
               <div className="px-3.5 py-2.5 text-xs font-bold tracking-wider text-slate-600 uppercase">{rowsBy === 'crews' ? 'Crew' : 'Job'}</div>
               {days.map((d, i) => (
-                <Link key={d} to={`/?date=${d}`} className={cx('border-l border-slate-200 px-3 py-2.5 text-slate-900 no-underline hover:bg-blue-50', i > 4 && 'bg-slate-100 text-slate-500', d === todayIso() && 'bg-blue-50')}>
+                <Link key={d} to={`/dispatch?date=${d}`} className={cx('border-l border-slate-200 px-3 py-2.5 text-slate-900 no-underline hover:bg-blue-50', i > 4 && 'bg-slate-100 text-slate-500', d === todayIso() && 'bg-blue-50')}>
                   <div className="text-xs font-bold tracking-wider text-slate-600 uppercase">{dayLabel(d)}</div>
                   <div className="text-lg font-bold">{monthDay(d)}</div>
                 </Link>

@@ -16,12 +16,14 @@ interface Row {
 
 export default function WorkOrders() {
   const { canEdit } = useAuth();
-  const [status, setStatus] = useState<'open' | WoStatus | 'all'>('open');
+
   const [type, setType] = useState<'all' | WoType>('all');
   const [from, setFrom] = useState(shift(todayIso(), -30));
   const [to, setTo] = useState(shift(todayIso(), 30));
-  const [flagged, setFlagged] = useState(false);
   const [params] = useSearchParams();
+  const [flagged, setFlagged] = useState(() => params.get('flagged') === '1');
+  // flags usually sit on finished work orders, so the flagged view shows every status
+  const [status, setStatus] = useState<'open' | WoStatus | 'all'>(() => (params.get('flagged') === '1' ? 'all' : 'open'));
   const [text, setText] = useState(params.get('q') ?? '');
   const [newOpen, setNewOpen] = useState(false);
 

@@ -23,10 +23,12 @@ function IntakeCount() {
 
 export default function Layout() {
   const { profile, role, isAdmin, signOut } = useAuth();
+  const dash = role === 'admin' || role === 'manager' || role === 'read_only_manager';
   const nav = useNavigate();
   const [q, setQ] = useState('');
   const links: [string, string, boolean][] = [
-    ['/', 'Dispatch', true],
+    ['/', 'Dashboard', dash],
+    ['/dispatch', 'Dispatch', true],
     ['/week', 'Week', true],
     ['/work-orders', 'Work orders', true],
     ['/jobs', 'Jobs', true],

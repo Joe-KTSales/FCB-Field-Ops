@@ -7,6 +7,7 @@ import Login from '@/pages/Login';
 import { Button, ErrorBox, Field, Spinner, inputCls } from '@/components/ui';
 
 const Dispatch = lazy(() => import('@/pages/Dispatch'));
+const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const Week = lazy(() => import('@/pages/Week'));
 const WorkOrders = lazy(() => import('@/pages/WorkOrders'));
 const WorkOrderDetail = lazy(() => import('@/pages/WorkOrderDetail'));
@@ -72,7 +73,8 @@ export default function App() {
     <Suspense fallback={<Spinner />}>
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<Dispatch />} />
+          <Route index element={role === 'admin' || role === 'manager' || role === 'read_only_manager' ? <Dashboard /> : <Navigate to="/dispatch" replace />} />
+          <Route path="dispatch" element={<Dispatch />} />
           <Route path="week" element={<Week />} />
           <Route path="work-orders" element={<WorkOrders />} />
           <Route path="work-orders/:id" element={<WorkOrderDetail />} />

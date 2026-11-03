@@ -349,7 +349,7 @@ crow, mrow = [], []
 crew_id = {}
 for i, (cname, dept, lead, helpers, color) in enumerate(CREWS):
     crew_id[cname] = uid("crew", cname)
-    crow.append([q(crew_id[cname]), q(cname), q(dept), q(color), q(i)])
+    crow.append([q(crew_id[cname]), q(lead), q(dept), q(color), q(i)])   # crews are named by the lead's full name
     mrow.append([q(crew_id[cname]), q(emp_id[lead]), q("lead")])
     mrow += [[q(crew_id[cname]), q(emp_id[h]), q("helper")] for h in helpers]
 p3 = [

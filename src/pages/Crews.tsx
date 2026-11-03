@@ -161,7 +161,12 @@ export default function Crews() {
                       <span className={cx('flex-1', m.position === 'lead' && 'font-bold')}>{m.position === 'lead' ? '★ ' : ''}{empName(m.employee_id)}</span>
                       {canEdit && (
                         <>
-                          <button className="text-xs text-brand-dark underline" onClick={() => run.mutate(async () => must(await supabase.from('crew_default_members').update({ position: m.position === 'lead' ? 'helper' : 'lead' }).eq('crew_id', c.id).eq('employee_id', m.employee_id)))}>
+                          <button className="text-xs text-brand-dark underline" onClick={() => run.mutate(async () => {
+                            const toLead = m.position !== 'lead';
+                            if (toLead) must(await supabase.from('crew_default_members').update({ position: 'helper' }).eq('crew_id', c.id).eq('position', 'lead'));
+                            must(await supabase.from('crew_default_members').update({ position: toLead ? 'lead' : 'helper' }).eq('crew_id', c.id).eq('employee_id', m.employee_id));
+                            if (toLead) must(await supabase.from('crews').update({ name: empName(m.employee_id) }).eq('id', c.id));
+                          })}>
                             make {m.position === 'lead' ? 'helper' : 'lead'}
                           </button>
                           <button aria-label="Remove from crew" className="text-red-700" onClick={() => run.mutate(async () => must(await supabase.from('crew_default_members').delete().eq('crew_id', c.id).eq('employee_id', m.employee_id)))}>×</button>
@@ -184,7 +189,7 @@ export default function Crews() {
             {canEdit && (
               <Card className="flex flex-col gap-2 border-dashed p-3">
                 <b className="text-sm">New crew</b>
-                <input aria-label="New crew name" className={inputCls} placeholder="Usually the lead’s name" value={newCrew.name} onChange={(e) => setNewCrew({ ...newCrew, name: e.target.value })} />
+                <input aria-label="New crew name" className={inputCls} placeholder="Lead’s full name" value={newCrew.name} onChange={(e) => setNewCrew({ ...newCrew, name: e.target.value })} />
                 <select aria-label="New crew department" className={inputCls} value={newCrew.department} onChange={(e) => setNewCrew({ ...newCrew, department: e.target.value })}>
                   {(departments.data ?? []).map((d) => <option key={d.code} value={d.code}>{deptLabel(d)}</option>)}
                 </select>
